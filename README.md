@@ -27,6 +27,12 @@ The images you want in your gallery must be copied into the **/galley** director
 
 Update **gallery.json** to reference your images and to add descriptions as required.
 
+**buildimages.cmd** must be configured to include the path to magick.exe. This is path to where ImageMagick was installed during was installed about. Adjust the line:
+
+    set IM="C:\Program Files (x86)\ImageMagick-7.0.7-Q8\magick.exe"
+ 
+As appropriate. With the default installation of ImageMagick this may not need to be changed.
+
 Run **buildimages.cmd** to create the thumbnails for your gallery. Thumbnails are required as images can be large and loading these over the internet on a mobile connection can be slow.
 
 ## Installing the bower components
@@ -110,7 +116,7 @@ The images in the **images/manifest** folder can also be updated. To get the cor
 **Changing the theme**
 Polymer applications are easy theme. Themes can be created using this [tool](https://polymerthemes.com/custom-style/). Create a theme and follow the instructions [here](https://polymerthemes.com/help/).
 
- 
+
 ## TODO - missing features
 1. Securing the application so that only authorised users can login and see the photos.
 
