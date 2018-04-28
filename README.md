@@ -83,9 +83,36 @@ This will request you to login into your Firebase account. If the publishing is 
 
 Good Luck!
 
+### Make the app your
+It is important that you know how to customise the app and make it yours. This includes somme basic things like changing the title, text, logo and them.
 
+1. **Changing the title**
+The title is what appear in the title bar in your browser. 
+In **index.html** look for "**Your website details**" and update as necessary to make it your own. This text occurs five times. The same should be done for "**application-name**" and "**description**".
+
+2. **Changing the logo**
+This is little more tricky as the logo appears in a few places for different reasons. The main logo on the title bar can be found in **src/my-app.html**
+
+Find the line:
+
+    <iron-icon class="logo" icon="my-icons:logo"></iron-icon>
+
+The logo is "my-icons:logo". The actual logo is stored in **src/my-icons**. The format of this is SVG which is beyond the scope of what we are doing. A collection of good icons can be found on the web. I use [this](https://material.io/icons/) for finding some that I use.
+
+If you do not want to use SVG you can use and image. Remember the image should be small so that it can load quickly. The best format to use is a png. Change the line to: 
+
+    <iron-icon class="logo" src="src/logo.png"></iron-icon>
+
+**logo.png** is the image to use. Ensure that this stored in the correct location otherwise it will not be found. This should be in the **src** folder.
+
+The images in the **images/manifest** folder can also be updated. To get the correct sizes it is better to use a web tool (that I will add later).
+
+**Changing the theme**
+Polymer applications are easy theme. Themes can be created using this [tool](https://polymerthemes.com/custom-style/). Create a theme and follow the instructions [here](https://polymerthemes.com/help/).
+
+ 
 ## TODO - missing features
-1. Securing the application so that only authorised users can login and see the photos
+1. Securing the application so that only authorised users can login and see the photos.
 
 2. Uploading photos
 

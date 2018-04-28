@@ -59,6 +59,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     background-color: var(--paper-grey-50);
                 }
             }
+            h3 {
+                text-align: center;
+            }
         </style>
         <paper-icon-button id="stopSlideShow" class="pl" play$="[[!play]]" icon="my-icons:pause-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
         <paper-icon-button id="startSlideShow" class="pl" play$="[[play]]" icon="my-icons:play-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
@@ -68,6 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div>
                     <iron-image placeholder="[[getTagImage(item, xmlData)]]" sizing="contain" preload="" fade="" data-src$="[[getLargeImage(item, xmlData)]]">
                     </iron-image>
+                    <h3>[[item.description]]</h3>
                 </div>
             </template>
         </skeleton-carousel>

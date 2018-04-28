@@ -52,6 +52,10 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 overflow-y: auto;
                 overflow-x: hidden;
             }
+
+            h3 {
+                text-align: center;
+            }
         </style>
         <iron-scroll-threshold id="pListViewTheshold" lower-threshold="500" on-lower-threshold="_loadMoreData" scroll-target="plistView">
             <iron-list id="plistView" role="listbox" grid selected="[[selectedItem]]" items="[]" as="item">
@@ -60,6 +64,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                         on-tap="_selectItem">
                         <div>
                             <iron-image class="photo-item" sizing="contain" preload fade src="[[getTagImage(item,xmlData)]]"></iron-image>
+                            <h3>[[item.description]]</h3>
                         </div>
                     </paper-button>
                 </template>
