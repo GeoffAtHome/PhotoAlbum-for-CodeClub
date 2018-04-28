@@ -1,0 +1,51 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-home">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <h1>Welcome to my website.</h1>
+      <p>Add what your website is about here</p>
+      <p>You can even list things -
+        <ul style="list-style-type:circle">
+          <li>Thing one</li>
+          <li>Thing two</li>
+          <li>Thing three</li>
+          <li>Thing four</li>
+          <li>Thing five</li>
+          <li>Thing six</li>
+        </ul>
+      </p>
+      <p>And more</p>
+    </div>
+  </template>
+
+  <script>
+    class MyHome extends Polymer.Element {
+      static get is() {
+        return 'my-home';
+      }
+    }
+
+    window.customElements.define(MyHome.is, MyHome);
+  </script>
+</dom-module>

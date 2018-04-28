@@ -1,0 +1,136 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58679425ac436cee3ab6d190c6d,Holidays,home,home
+
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="single-behaviors.html">
+
+
+<dom-module id="single-photo-list">
+    <template>
+        <style>
+             :host {
+                display: block;
+                height: 100%;
+                background-color: var(--paper-grey-100);
+            }
+
+             :host([hidden]) {
+                display: none !important;
+            }
+
+            .photo-item {
+                margin: 0 0 0 0;
+                padding: 0 0 0 0;
+                width: 300px;
+                height: 300px;
+                max-width: 300px;
+                max-height: 300px;
+                min-width: 150px;
+                min-height: 150px;
+            }
+
+            paper-button:focus {
+                background-color: var(--paper-grey-200);
+            }
+
+            iron-list {
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        </style>
+        <iron-scroll-threshold id="pListViewTheshold" lower-threshold="500" on-lower-threshold="_loadMoreData" scroll-target="plistView">
+            <iron-list id="plistView" role="listbox" grid selected="[[selectedItem]]" items="[]" as="item">
+                <template>
+                    <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" list-index$="[[item.link]]" url$="[[getUrlIndex(item, xmlData)]]"
+                        on-tap="_selectItem">
+                        <div>
+                            <iron-image class="photo-item" sizing="contain" preload fade src="[[getTagImage(item,xmlData)]]"></iron-image>
+                        </div>
+                    </paper-button>
+                </template>
+            </iron-list>
+        </iron-scroll-threshold>
+    </template>
+
+    <script>
+        class SinglePhotoList extends SingleBehaviors {
+            constructor() {
+                super();
+            }
+
+            static get is() {
+                return 'single-photo-list';
+            };
+
+            static get properties() {
+                return {
+                    hidden: {
+                        type: Boolean,
+                        value: false,
+                    },
+                    currentIndex: {
+                        type: Number,
+                        value: 0,
+                    },
+                };
+            }
+
+            static get observers() {
+                return ['_dataChanged(xmlData, hide)'];
+            }
+
+            _dataChanged(xmlData, hide) {
+                if (!hide) {
+                    var thisList = this.$.plistView;
+                    this.once = false;
+                    this.currentIndex = 0;
+                    thisList.items = [];
+                    this._loadMoreData();
+                    setTimeout(function () {
+                        this.dispatchEvent(new CustomEvent('iron-resize', {
+                            bubbles: true,
+                            composed: true
+                        }));
+                    }, 0);
+                }
+            };
+
+            resize() {
+                this.dispatchEvent(new CustomEvent('iron-resize', {
+                    bubbles: true,
+                    composed: true
+                }));
+            };
+
+            _loadMoreData() {
+                if (this.xmlData) {
+                    var start = this.currentIndex;
+                    var end = Math.min(this.xmlData.items.length, start + 20);
+                    this.currentIndex = end;
+                    while (start < end) {
+                        this.$.plistView.push('items', this.xmlData.items[start]);
+                        start++;
+                    }
+                    // Clear the lower threshold so we can load more data when the user scrolls down again.
+                    this.$.pListViewTheshold.clearTriggers();
+                }
+            };
+        }
+        window.customElements.define(SinglePhotoList.is, SinglePhotoList);
+    </script>
+</dom-module>

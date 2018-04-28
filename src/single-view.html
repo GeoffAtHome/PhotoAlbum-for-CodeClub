@@ -1,0 +1,111 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="xml-reader.html">
+<link rel="import" href="single-content.html">
+
+<dom-module id="single-view">
+    <template>
+        <style>
+             :host {
+                display: block;
+                overflow: hidden;
+            }
+
+             :host([hidden]) {
+                display: none !important;
+            }
+
+             :focus {
+                outline: none;
+            }
+        </style>
+        <xml-reader xml-url="[[getPath()]]" xml-data="{{xmlData}}" loading="{{mainLoading}}"></xml-reader>
+        <single-content id="main" active-page="[[activePage]]" selected-item="[[selectedItem]]" xml-data="[[xmlData]]"></single-content>
+    </template>
+
+    <script>
+        class SingleView extends Polymer.Element {
+            static get is() {
+                return 'single-view';
+            }
+
+            static get properties() {
+                return {
+                    activePage: {
+                        type: Boolean,
+                        value: true,
+                        notify: true,
+                    },
+                    // Url for JSON to load
+                    path: {
+                        type: String
+                    },
+                    // JSON Data
+                    xmlData: {
+                        type: Object,
+                        notify: true
+                    },
+                    // Item selected - this will be the same value in both the photo list and actual slide
+                    selectedItem: {
+                        type: String
+                    },
+                    mainLoading: {
+                        type: Boolean,
+                        value: false,
+                        notify: true,
+                    },
+                    user: {
+                        type: Object,
+                    },
+                    offline: {
+                        type: Boolean,
+                    }
+                }
+            }
+
+            ready() {
+                super.ready();
+                window.addEventListener('start-stop-slideshow', () => this._startStopSlideShow());
+                window.addEventListener('pause', () => this._stopSlideShow());
+                window.addEventListener('slide', () => this._slide(event));
+                window.addEventListener('exitSlideShow', () => this._exitSlideShow());
+            }
+
+            getPath() {
+                let path = '../gallery/gallery';
+
+                return path;
+            }
+
+            _slide(e) {
+                this.selectedItem = e.detail;
+                this.activePage = false;
+            }
+
+            _startStopSlideShow() {
+                this.$.main.startStopSlideShow();
+            }
+
+            _stopSlideShow() {
+                this.$.main.stopSlideShow();
+            }
+
+            _exitSlideShow() {
+                this._stopSlideShow();
+                this.activePage = !this.activePage;
+            }
+        }
+
+        window.customElements.define(SingleView.is, SingleView);
+    </script>
+
+</dom-module>

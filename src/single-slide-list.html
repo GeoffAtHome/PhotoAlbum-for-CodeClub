@@ -1,0 +1,173 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../bower_components/skeleton-carousel/skeleton-carousel.html">
+<link rel="import" href="single-behaviors.html">
+<link rel="import" href="my-icons.html">
+
+<dom-module id="single-slide-list">
+    <template>
+        <style is="custom-style">
+            :host {
+                display: inline-block;
+                width: 100%;
+            }
+
+            :host([hidden]) {
+                display: none !important;
+            }
+
+            .pl,
+            .fs {
+                position: absolute;
+                top: 150px;
+                width: 75px;
+                height: 75px;
+                stroke-width: -0.8px;
+                --iron-icon-stroke-color: gray;
+                --iron-icon-fill-color: gray;
+                z-index: 1;
+            }
+
+            .pl {
+                top: 75px;
+            }
+
+            .pl[play] {
+                display: none;
+            }
+
+            iron-image {
+                display: block;
+                background-color: var(--paper-grey-200);
+                @apply --layout-flex-auto;
+            }
+
+            skeleton-carousel {
+                height: calc(100vh - 68px);
+                --skeleton-carousel: {
+                    background-color: var(--paper-grey-50);
+                }
+            }
+        </style>
+        <paper-icon-button id="stopSlideShow" class="pl" play$="[[!play]]" icon="my-icons:pause-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
+        <paper-icon-button id="startSlideShow" class="pl" play$="[[play]]" icon="my-icons:play-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
+        <paper-icon-button class="fs" icon="my-icons:close" on-tap="exitSlideShow"></paper-icon-button>
+        <skeleton-carousel nav dots id="carousel" auto="[[play]]" selected="[[selected]]" disable-keys="true" loop>
+            <template is="dom-repeat" items="[[xmlData.items]]">
+                <div>
+                    <iron-image placeholder="[[getTagImage(item, xmlData)]]" sizing="contain" preload="" fade="" data-src$="[[getLargeImage(item, xmlData)]]">
+                    </iron-image>
+                </div>
+            </template>
+        </skeleton-carousel>
+    </template>
+    <script>
+        class SingleSlideList extends Polymer.mixinBehaviors([
+            Polymer.IronA11yKeysBehavior,
+        ], SingleBehaviors) {
+
+            constructor() {
+                super();
+            }
+
+            static get is() {
+                return 'single-slide-list';
+            };
+
+            static get properties() {
+                return {
+                    play: {
+                        type: Boolean,
+                        value: false,
+                    },
+                    hidden: {
+                        type: Boolean,
+                        value: false,
+                    },
+                    selectedItem: {
+                        type: String,
+                        notify: true,
+                        observer: '_newPageSelected',
+                    },
+                    selected: {
+                        type: Number,
+                        value: 0
+                    }
+                };
+            }
+
+            // Observers
+            _newPageSelected(newVal, oldVal) {
+                let newPage = this.xmlData.items.find(s => s.link == newVal);
+                if (typeof newPage !== 'undefined') {
+                    // Stop the animation of hidden pages
+                    this.selected = this.xmlData.items.indexOf(newPage);
+                } else {
+                    this.selected = 0;
+                }
+            }
+            /**
+             * Key bindings
+             * @return {object}
+             */
+            get keyBindings() {
+                return {
+                    'left': 'prevKey',
+                    'right': 'nextKey',
+                    'down backspace rewind': 'exitSlideShow',
+                    'space up': 'startStopSlideShow'
+                };
+            }
+
+            setfocus() {
+                this.focus();
+            }
+
+            prevKey(event) {
+                event.preventDefault();
+                return this.$.carousel.prev();
+            }
+
+            nextKey(event) {
+                event.preventDefault();
+                return this.$.carousel.next();
+            }
+
+            exitSlideShow() {
+                this.dispatchEvent(new CustomEvent('exitSlideShow', {
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+
+            stopSlideShow() {
+                this.play = false;
+            };
+
+            startStopSlideShow(event) {
+                event.preventDefault();
+                this.play = !this.play;
+            };
+
+            exitSlideShow() {
+                this.dispatchEvent(new CustomEvent('exitSlideShow', {
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        }
+
+        customElements.define(SingleSlideList.is, SingleSlideList);
+    </script>
+</dom-module>

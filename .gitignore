@@ -1,0 +1,6 @@
+# Ignore gallery as these are built by running buildimages.cmd
+gallery/C/*
+gallery/L/*
+gallery/X/*
+gallery/M/*
+gallery/S/*

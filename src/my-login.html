@@ -1,0 +1,104 @@
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../bower_components/login-fire/login-fire.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+
+<dom-module id="my-login">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+
+            .spx {
+                display: none;
+            }
+
+            .spx[loading] {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: #FFF;
+            }
+        </style>
+
+        <firebase-app name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
+            database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
+            messaging-sender-id="574210347790"></firebase-app>
+        <div hidden$="[[!offline]]">
+            <h1>Sorry you are currently off line and cannot login</h1>
+        </div>
+        <div hidden$="[[offline]]">
+            <div class="spx" loading$="[[!signedIn]]">
+                <h1>Welcome to Geoff's photo album</h1>
+                <login-fire id="auth" app-name="login" providers="google, facebook, twitter, github, anonymous" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
+            </div>
+        </div>
+        <my-app id="mainapp" hidden$="[[!signedIn]]" offline="[[offline]]" signed-in="[[signedIn]]" user="[[user]]"></my-app>
+    </template>
+    <script>
+        class MyLogin extends Polymer.Element {
+            static get is() {
+                return 'my-login';
+            }
+
+            static get properties() {
+                return {
+                    user: {
+                        type: Object
+                    },
+                    signedIn: {
+                        type: Boolean,
+                        value: !1,
+                        observer: '_onLogin'
+                    },
+                    statusKnown: {
+                        type: Object
+                    },
+                    offline: {
+                        type: Boolean,
+                        value: !1
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                window.addEventListener('log-out', () => this._logout());
+                this.offline = navigator.onLine === !1;
+                window.addEventListener("online", () => this._online());
+                window.addEventListener("offline", () => this._offline());
+            }
+
+            _onLogin(n) {
+                if (n) {
+                    Polymer.importHref(
+                        'src/my-app.html',
+                        null,
+                        null,
+                        true);
+                }
+            }
+
+            _online() {
+                this.offline = !1;
+            }
+
+            _offline() {
+                this.offline = !0;
+            }
+
+            _logout() {
+                return this.$.auth.signOut();
+            }
+        }
+        window.customElements.define(MyLogin.is, MyLogin);
+    </script>
+</dom-module>

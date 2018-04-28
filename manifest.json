@@ -1,0 +1,25 @@
+{
+  "name": "Long Name",
+  "short_name": "Name",
+  "description": "Project Description",
+  "icons": [{
+      "src": "images/manifest/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "images/manifest/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#306724",
+  "background_color": "#306724"
+}
