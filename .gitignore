@@ -4,3 +4,9 @@ gallery/L/*
 gallery/X/*
 gallery/M/*
 gallery/S/*
+
+# Ignore bower components as these are fetched by running bower install
+bower_components/*
+
+# Ignore build directory as this is recreated by running polymer build
+build/*
