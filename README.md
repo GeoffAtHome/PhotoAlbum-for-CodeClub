@@ -1,2 +1,98 @@
 # PhotoAlbum-for-CodeClub
-Simple photo album for Code Club.
+A simple photo album for Code Club.
+
+## Prerequisites
+
+* First, install [Polymer CLI](https://github.com/Polymer/polymer-cli) using
+[npm](https://www.npmjs.com) (we assume you have pre-installed [node.js](https://nodejs.org)).
+
+      npm install -g polymer-cli
+
+* Second, install [Bower](https://bower.io/) using [npm](https://www.npmjs.com)
+
+        npm install -g bower
+
+
+* Third, install [Firebase CLI](https://github.com/firebase/firebase-tools) using [npm](https://www.npmjs.com)
+
+        npm install -g firebase-tools
+
+
+* Finally, install [ImageMagick](https://www.imagemagick.org/script/download.php)
+
+Find the right version for your environment. Assuming that you are using Windows install "Win32 static at 8 bits-per-pixel component"
+
+## Seting up the gallery
+The images you want in your gallery must be copied into the **/galley** directory.
+
+Update **gallery.json** to reference your images and to add descriptions as required.
+
+Run **buildimages.cmd** to create the thumbnails for your gallery. Thumbnails are required as images can be large and loading these over the internet on a mobile connection can be slow.
+
+## Installing the bower components
+The bower components are the third-party polymer elements required for the applications. To install run:
+
+    bower install
+
+## Linking with firebase
+To allow authentication with Firebase you need to update **src/login.html**. Find the line
+        <firebase-app name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
+            database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
+            messaging-sender-id="574210347790"></firebase-app>
+
+And replace **api-key**,**auth-domain** etc. with the details obtained from your [Firebase console](https://console.firebase.google.com) for your application. These should look like:
+
+    apiKey: "AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA",
+    authDomain: "my-gallery-2a3ac.firebaseapp.com",
+    databaseURL: "https://my-gallery-2a3ac.firebaseio.com",
+    projectId: "my-gallery-2a3ac",
+    storageBucket: "my-gallery-2a3ac.appspot.com",
+    messagingSenderId: "574210347790"
+
+
+In addition, update **.firebaserc** with your projectId.
+
+{
+  "projects": {
+    "default": "my-gallery-2a3ac"
+  }
+}
+
+
+## Login options
+Firebase provides a set of authentication providers. To access this change the following line in **src/login-fire.html** to reflect the options selected for your application in the firebase console.
+
+                <login-fire id="auth" app-name="login" providers="google, facebook, twitter, github, anonymous" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
+
+If you don't want ''facebook'' remove ''facebook''. Repeat for the other providers.
+
+## Testing the application
+To run application simple run the following command.
+
+    start.cmd
+
+If all is well the application should open on the login screen in your default browser. To allow logging in, the URL **127.0.0.1** MUST be changed to **localhost** otherwise Firebase will reject the login as real.
+
+## Publishing the application
+
+To publish the application to Firebase run the command
+
+    publish.cmd
+
+This will request you to login into your Firebase account. If the publishing is successful you will be able to access your album from anywhere view your firebase URL.
+
+Good Luck!
+
+
+## TODO - missing features
+1. Securing the application so that only authorised users can login and see the photos
+
+2. Uploading photos
+
+3. Creating new albums
+
+4. Editing descriptions
+
+5. Messaging
+
+6. Ranking photos 
