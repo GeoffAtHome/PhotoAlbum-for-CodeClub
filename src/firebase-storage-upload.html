@@ -1,0 +1,167 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+<!--
+`firebase-storage-upload`
+Upload files to firebase storage bucket
+
+@demo demo/index.html
+-->
+
+<dom-module id="firebase-storage-upload">
+	<template>
+    	<style>
+      	:host {
+        	display: block;
+      	}
+    	</style>
+
+    	<content></content>
+
+		<input
+			id="file"
+			type="file"
+			on-change="_handleFile"
+			accept="[[accept]]"
+			name="[[name]]"
+			hidden$="[[hideButton]]"
+			>
+
+	</template>
+
+  	<script>
+		class FirebaseStorageUpload extends Polymer.Element {
+      		static get is() {
+        		return 'firebase-storage-upload';
+      		}
+    
+      		static get properties() {
+        		return {
+          		/**
+          		* Firebase app to use.
+          		* dont forget to set your storagebucket
+          		*/
+          			ref: {
+						type: Object,
+						value: {}
+					},
+				/**
+				* Specifies the types of files that the server accepts.
+				* Syntax: file_extension|audio/*|video/*|image/*|media_type
+				*/
+					accept: {
+						type: String,
+						value: ''
+					},
+				/**
+				* Specifies the maximum file size in kB allowed to upload. Default is
+				* unlimited.
+				*/
+					maxFileSize: {
+						type: Number,
+						value: Infinity
+					},
+				/**
+				* path on storage bucket with trailing slash
+				* unlimited.
+				*/
+					path: {
+						type: String,
+						value: ''
+					},
+				/**
+				* Name for input element.
+				*/
+					name: {
+						type: String,
+						value: 'file-upload'
+					},
+				/**
+				* Reference to storage bucket
+				*/
+					storageReference: {
+						type: Object,
+						value: {}
+					},
+				/**
+				* Upload task from firebases put()
+				*/
+					uploadTask: {
+						type: Object
+					},
+				/**
+				* Current progress in %
+				* 0 - 100
+				*/
+					progress: {
+						type: Number,
+						value: 0,
+						reflectToAttribute: true,
+						notify: true
+					},
+				/**
+				* Hide input button
+				*/
+					hideButton: {
+						type: Boolean,
+						value: false
+					}
+				};
+	        }
+
+			_handleFile() {
+				let file = this.$.file.files[0];
+				let maxFileSizeInKiloBytes = this.maxFileSize * 1024;
+
+				if(!file) {
+					return;
+				}
+
+				if(file.size > maxFileSizeInKiloBytes) {
+					return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
+				}
+				
+				if(!this.ref) {
+					return alert("Upload path not set");
+				}
+
+				this._uploadFile(this.ref, file);
+			}
+
+			_uploadFile(path, file) {
+				this.progress = 0;
+				this.uploadTask = this.storageReference.child(file.name).put(file);
+				this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+					function(snapshot) {
+						this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+						console.log('Upload is ' + this.progress + '% done');
+
+						switch (snapshot.state) {
+						case firebase.storage.TaskState.PAUSED: // or 'paused'
+							console.log('Upload is paused');
+							break;
+						case firebase.storage.TaskState.RUNNING: // or 'running'
+							console.log('Upload is running');
+							break;
+						}
+
+					}, 
+					function(error) {
+						console.log('error', error);
+					}, 
+					function(snapshot) {
+						console.log('success', snapshot);
+					}
+				);
+			}
+
+			connectedCallback() {
+    			super.connectedCallback();
+				this.set('storageReference', firebase.storage().ref(this.ref));
+			}
+		}
+
+	    window.customElements.define(FirebaseStorageUpload.is, FirebaseStorageUpload);
+
+  	</script>
+</dom-module>

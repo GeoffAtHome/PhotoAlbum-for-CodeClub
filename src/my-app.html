@@ -133,7 +133,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="home" role="main">
           <my-home name="home"></my-home>
-          <my-about name="about"></my-about>
+          <my-about name="about" firebase-app="[[firebaseApp]]"></my-about>
           <my-gallery name="gallery"></my-gallery>
           <my-contact name="contact"></my-contact>
           <my-view404 name="view404"></my-view404>
@@ -163,6 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           offline: Boolean,
           signedIn: Boolean,
+          firebaseApp: Object,
           user: Object
         };
       }

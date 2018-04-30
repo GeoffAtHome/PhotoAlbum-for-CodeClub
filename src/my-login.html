@@ -29,7 +29,7 @@
             }
         </style>
 
-        <firebase-app name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
+        <firebase-app id="firebaseApp" name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
             database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
             messaging-sender-id="574210347790"></firebase-app>
         <div hidden$="[[!offline]]">
@@ -41,7 +41,7 @@
                 <login-fire id="auth" app-name="login" providers="google, facebook, twitter, github, anonymous" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
             </div>
         </div>
-        <my-app id="mainapp" hidden$="[[!signedIn]]" offline="[[offline]]" signed-in="[[signedIn]]" user="[[user]]"></my-app>
+        <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]" user="[[user]]"></my-app>
     </template>
     <script>
         class MyLogin extends Polymer.Element {
@@ -51,17 +51,14 @@
 
             static get properties() {
                 return {
-                    user: {
-                        type: Object
-                    },
+                    firebaseApp: Object,
+                    user: Object,
                     signedIn: {
                         type: Boolean,
                         value: !1,
                         observer: '_onLogin'
                     },
-                    statusKnown: {
-                        type: Object
-                    },
+                    statusKnown: Object,
                     offline: {
                         type: Boolean,
                         value: !1
@@ -75,6 +72,7 @@
                 this.offline = navigator.onLine === !1;
                 window.addEventListener("online", () => this._online());
                 window.addEventListener("offline", () => this._offline());
+                this.firebaseApp = this.$.firebaseApp;
             }
 
             _onLogin(n) {

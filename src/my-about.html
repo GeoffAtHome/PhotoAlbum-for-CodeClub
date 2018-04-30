@@ -9,8 +9,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html"> 
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="firebase-storage-upload.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-about">
@@ -37,14 +39,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <firebase-app api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
+        database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
+        messaging-sender-id="574210347790"></firebase-app>
     <div class="card">
       <h1>About</h1>
       <div class="flex">
-        <div>
-          <iron-image src="images/about.png" preload sizing="cover"></iron-image>
-        </div>
         <div class="about">
           <p>About Text Here.</p>
+          <firebase-storage-upload
+            id="input"
+            firebase-app="[[firebaseApp]]"
+            name="login"
+            label="Upload label"
+            ref="/tests/"
+            accept="image/jpeg,image/jpeg,image/png"
+            progress="{{progress}}">
+
+            <paper-progress value="[[progress]]"></paper-progress>
         </div>
       </div>
     </div>
@@ -54,6 +66,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     class MyAbout extends Polymer.Element {
       static get is() {
         return 'my-about';
+      }
+      static get properties() {
+        return {
+          firebaseApp: Object,
+          user: Object
+        };
       }
     }
 
