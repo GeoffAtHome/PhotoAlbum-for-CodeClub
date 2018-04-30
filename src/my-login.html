@@ -2,7 +2,7 @@
 <link rel="import" href="../bower_components/polymerfire/firebase-app.html">
 <link rel="import" href="../bower_components/login-fire/login-fire.html">
 <link rel="import" href="../bower_components/polymer/polymer.html">
-
+<link rel="import" href="shared-styles.html">
 
 <dom-module id="my-login">
     <template>
@@ -38,10 +38,11 @@
         <div hidden$="[[offline]]">
             <div class="spx" loading$="[[!signedIn]]">
                 <h1>Welcome to Geoff's photo album</h1>
-                <login-fire id="auth" app-name="login" providers="google, facebook, twitter, github, anonymous" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
+                <login-fire id="auth" app-name="login" providers="google" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
             </div>
         </div>
-        <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]" user="[[user]]"></my-app>
+        <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]"
+            user="[[user]]"></my-app>
     </template>
     <script>
         class MyLogin extends Polymer.Element {
