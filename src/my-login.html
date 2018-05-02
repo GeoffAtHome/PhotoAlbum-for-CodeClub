@@ -42,7 +42,7 @@
             </div>
         </div>
         <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]"
-            user="[[user]]"></my-app>
+            user="[[user]]" userdata="[[userdata]]"></my-app>
     </template>
     <script>
         class MyLogin extends Polymer.Element {
@@ -54,12 +54,13 @@
                 return {
                     firebaseApp: Object,
                     user: Object,
+                    statusKnown: Object,
+                    userdata: Object,
                     signedIn: {
                         type: Boolean,
                         value: !1,
                         observer: '_onLogin'
                     },
-                    statusKnown: Object,
                     offline: {
                         type: Boolean,
                         value: !1
@@ -78,6 +79,19 @@
 
             _onLogin(n) {
                 if (n) {
+                    let username = this.user.displayName;
+                    if (username == undefined) {
+                        username = "Unknown";
+                    }
+
+                    this._createUserIfUserDoesNotExist(this.user, {
+                        username: username,
+                        email: this.user.email,
+                        roles: {
+                            member: true
+                        }
+                    });
+
                     Polymer.importHref(
                         'src/my-app.html',
                         null,
@@ -96,6 +110,27 @@
 
             _logout() {
                 return this.$.auth.signOut();
+            }
+
+            _createUserIfUserDoesNotExist(user, userdata) {
+                firebase.database(this.firebaseApp.app).ref('/users/' + user.uid).once('value').then(snapshot => {
+                        let returndata = snapshot.val();
+                        if (returndata == null) {
+                            firebase.database(this.firebaseApp.app).ref('users/' +
+                                    user.uid).set(userdata).then(details => {
+                                    console.log(details);
+                                })
+                                .catch(e => {
+                                    console.log(e);
+                                });
+                            this.userdata = userdata;
+                        } else {
+                            this.userdata = returndata;
+                        }
+                    })
+                    .catch(e => {
+                        console.log([e.message, user.email, "Already added"].join(' '));
+                    });
             }
         }
         window.customElements.define(MyLogin.is, MyLogin);

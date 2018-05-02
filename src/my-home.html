@@ -14,38 +14,51 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-home">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
-        padding: 10px;
-      }
-    </style>
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
 
-    <div class="card">
-      <h1>Welcome to my website.</h1>
-      <p>Add what your website is about here</p>
-      <p>You can even list things -
-        <ul style="list-style-type:circle">
-          <li>Thing one</li>
-          <li>Thing two</li>
-          <li>Thing three</li>
-          <li>Thing four</li>
-          <li>Thing five</li>
-          <li>Thing six</li>
-        </ul>
-      </p>
-      <p>And more</p>
-    </div>
-  </template>
+            h2([hidden]) {
+                display: none !important;
+            }
+        </style>
 
-  <script>
-    class MyHome extends Polymer.Element {
-      static get is() {
-        return 'my-home';
-      }
-    }
+        <div class="card">
+            <h1>Welcome, [[userdata.username]] to my website.</h1>
+            <h2 hidden$=[[!userdata.roles.admin]]>You are the administrator. You can view the gallery and upload photos.</h2>
+            <h2 hidden$=[[!userdata.roles.reader]]>You are able to view the gallery.</h2>
+            <h2 hidden$=[[!userdata.roles.member]]>You are waiting for your permission to use the site to be granted.</h2>
+            <p>Add what your website is about here</p>
+            <p>You can even list things -
+                <ul style="list-style-type:circle">
+                    <li>Thing one</li>
+                    <li>Thing two</li>
+                    <li>Thing three</li>
+                    <li>Thing four</li>
+                    <li>Thing five</li>
+                    <li>Thing six</li>
+                </ul>
+            </p>
+            <p>And more [[userdata.roles.member]]</p>
+        </div>
+    </template>
 
-    window.customElements.define(MyHome.is, MyHome);
-  </script>
+    <script>
+        class MyHome extends Polymer.Element {
+            static get is() {
+                return 'my-home';
+            }
+
+            static get properties() {
+                return {
+                    userdata: Object
+                };
+            }
+        }
+
+        window.customElements.define(MyHome.is, MyHome);
+    </script>
 </dom-module>

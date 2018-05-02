@@ -25,6 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-home.html">
 <link rel="lazy-import" href="my-about.html">
 <link rel="lazy-import" href="my-gallery.html">
+<link rel="lazy-import" href="my-upload.html">
 <link rel="lazy-import" href="my-contact.html">
 <link rel="lazy-import" href="my-view404.html">
 
@@ -114,6 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a name="about" on-click="_handle_click">About</a>
           <a name="gallery" on-click="_handle_click">Gallery</a>
           <a name="contact" on-click="_handle_click">Contact</a>
+          <a name="upload" on-click="_handle_click">Upload</a>
         </iron-selector>
       </app-drawer>
 
@@ -132,10 +134,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages selected="[[page]]" attr-for-selected="name" fallback-selection="home" role="main">
-          <my-home name="home"></my-home>
-          <my-about name="about" firebase-app="[[firebaseApp]]"></my-about>
+          <my-home name="home" userdata="[[userdata]]"></my-home>
+          <my-about name="about" userdata="[[userdata]]"></my-about>
           <my-gallery name="gallery"></my-gallery>
           <my-contact name="contact"></my-contact>
+          <my-upload name="upload" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-upload>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -164,7 +167,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           offline: Boolean,
           signedIn: Boolean,
           firebaseApp: Object,
-          user: Object
+          user: Object,
+          userdata: Object
         };
       }
 
