@@ -42,7 +42,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div class="upload" hidden$=[[!userdata.roles.admin]]>
                     <p>Select the files to upload.</p>
-                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" name="login" label="Upload label" ref="/tests/" accept="image/jpeg,image/jpeg,image/png"
+                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" name="login" label="Upload label" ref="/upload/" accept="image/jpeg,image/jpeg,image/png"
                         progress="{{progress}}">
 
                         <paper-progress value="[[progress]]"></paper-progress>

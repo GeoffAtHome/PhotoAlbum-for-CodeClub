@@ -16,10 +16,9 @@ Upload files to firebase storage bucket
 			}
 		</style>
 
-		<content></content>
-
+		<slot></slot>
 		<input id="file" type="file" on-change="_handleFile" accept="[[accept]]" name="[[name]]" hidden$="[[hideButton]]">
-
+		<p>[[status]]</p>
 	</template>
 
 	<script>
@@ -99,7 +98,8 @@ Upload files to firebase storage bucket
 					hideButton: {
 						type: Boolean,
 						value: false
-					}
+					},
+					status: String
 				};
 			}
 
@@ -126,8 +126,9 @@ Upload files to firebase storage bucket
 				this.progress = 0;
 				this.uploadTask = this.storageReference.child(file.name).put(file);
 				this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-					function (snapshot) {
+					snapshot => {
 						this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+						this.status = 'Uploading....'
 						console.log('Upload is ' + this.progress + '% done');
 
 						switch (snapshot.state) {
@@ -140,10 +141,12 @@ Upload files to firebase storage bucket
 						}
 
 					},
-					function (error) {
+					error => {
+						this.status = error.message;
 						console.log('error', error);
 					},
-					function (snapshot) {
+					snapshot => {
+						this.status = 'Upload complete'
 						console.log('success', snapshot);
 					}
 				);

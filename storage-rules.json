@@ -1,0 +1,26 @@
+service firebase.storage {
+    match / b / {
+        bucket
+    }
+    /o {
+    match / download {
+        // Anyone valid user can view any image
+        match / {
+            allImages = **
+        } {
+            allow read: if request.auth != null;
+        }
+    }
+
+    // Only authenticated users can write to "upload" images
+    match / upload / {
+        allImages = **
+    } {
+        allow write: if isAdmin(request);
+    }
+}
+}
+
+function isAdmin(r) {
+    return r != null && (['AmVfkD3772e2krSWoZhd5LvDwPI2'].indexOf(r.uid) > -1);
+}
