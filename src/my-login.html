@@ -29,9 +29,9 @@
             }
         </style>
 
-        <firebase-app id="firebaseApp" name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
-            database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
-            messaging-sender-id="574210347790"></firebase-app>
+        <firebase-app id="firebaseApp" name="login" api-key="AIzaSyCxJ6irD9TASR0ohMBhPAy1vMivvSk94aA" auth-domain="my-gallery-ff786.firebaseapp.com"
+            database-url="https://my-gallery-ff786.firebaseio.com" project-id="my-gallery-ff786" storage-bucket="my-gallery-ff786.appspot.com"
+            messaging-sender-id="980383036983"></firebase-app>
         <div hidden$="[[!offline]]">
             <h1>Sorry you are currently off line and cannot login</h1>
         </div>
@@ -113,7 +113,7 @@
             }
 
             _createUserIfUserDoesNotExist(user, userdata) {
-                firebase.database(this.firebaseApp.app).ref('/users/' + user.uid).once('value').then(snapshot => {
+                firebase.database(this.firebaseApp.app).ref('users/' + user.uid).once('value').then(snapshot => {
                         let returndata = snapshot.val();
                         if (returndata == null) {
                             firebase.database(this.firebaseApp.app).ref('users/' +

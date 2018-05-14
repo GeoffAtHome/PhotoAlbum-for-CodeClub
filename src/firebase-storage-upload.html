@@ -99,7 +99,8 @@ Upload files to firebase storage bucket
 						type: Boolean,
 						value: false
 					},
-					status: String
+					status: String,
+					url: String
 				};
 			}
 
@@ -148,6 +149,11 @@ Upload files to firebase storage bucket
 					snapshot => {
 						this.status = 'Upload complete'
 						console.log('success', snapshot);
+						this.dispatchEvent(new CustomEvent('new-url', {
+							bubbles: true,
+							composed: true,
+							detail: this.uploadTask.snapshot.metadata.downloadURLs[0]
+						}));
 					}
 				);
 			}

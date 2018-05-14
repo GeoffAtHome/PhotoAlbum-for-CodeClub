@@ -42,8 +42,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div class="upload" hidden$=[[!userdata.roles.admin]]>
                     <p>Select the files to upload.</p>
-                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" name="login" label="Upload label" ref="/upload/" accept="image/jpeg,image/jpeg,image/png"
-                        progress="{{progress}}">
+                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" url="[[url]]" name="login" label="Upload label" ref="/upload/"
+                        accept="image/jpeg,image/jpeg,image/png" progress="{{progress}}">
 
                         <paper-progress value="[[progress]]"></paper-progress>
                 </div>
@@ -60,8 +60,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 return {
                     firebaseApp: Object,
                     userdata: Object,
-                    progress: Number
+                    progress: Number,
+                    url: String,
+                    album: {
+                        type: Object,
+                        value: {
+                            title: "Album Title",
+                            description: "Album description",
+                            items: []
+                        }
+                    },
+                    fbref: Object
                 };
+            }
+
+            ready() {
+                super.ready();
+                window.addEventListener('new-url', () => this._newurl());
+            }
+
+            // Add the new URL to database for the album
+            _newurl() {
+                let albumListRef = firebase.database(this.firebaseApp.app).ref('album');
+                // let newImageRef = albumListRef.push();
+                this.album.items.push({
+                    title: "",
+                    link: event.detail,
+                    description: ""
+                })
+                albumListRef.update(this.album);
             }
         }
 
