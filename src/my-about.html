@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-about">
@@ -37,15 +38,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class="card">
+    <fi <div class="card">
       <h1>About</h1>
       <div class="flex">
         <p>About Text Here. </p>
         <p>Welcome, [[userdata.username]] </p>
         <p>email: [[userdata.email]]</p>
       </div>
-    </div>
-    </div>
+      <firebase-query path="album" data="{{data}}"></firebase-query>
+      </div>
+      </div>
   </template>
 
   <script>
@@ -56,7 +58,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       static get properties() {
         return {
-          userdata: Object
+          userdata: Object,
+          data: Object
         };
       }
     }

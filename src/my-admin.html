@@ -1,0 +1,94 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58679425ac436cee3ab6d190c6d,Holidays,home,home
+
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="single-behaviors.html">
+
+
+<dom-module id="my-admin">
+    <template>
+        <style>
+            :host {
+                display: block;
+                height: 100%;
+                background-color: var(--paper-grey-100);
+            }
+
+            :host([hidden]) {
+                display: none !important;
+            }
+
+            .photo-item {
+                margin: 0 0 0 0;
+                padding: 0 0 0 0;
+                width: 300px;
+                height: 300px;
+                max-width: 300px;
+                max-height: 300px;
+                min-width: 150px;
+                min-height: 150px;
+            }
+        </style>
+        <firebase-document app-name="login" path="album" data="{{data}}"></firebase-document>
+        <paper-input label="Album description:" value="{{data.description}}"></paper-input>
+        <paper-input label="Album title:" value="{{data.title}}"></paper-input>
+        <dom-repeat items="{{data.items}}">
+            <template>
+                <div hidden$="[[showItem(item)]]">
+                    <iron-image class="photo-item" sizing="contain" preload fade src="[[getImageSrc(item)]]"></iron-image>
+                    <paper-input label="Title:" value="{{item.title}}"></paper-input>
+                    <paper-input label="Description:" value="{{item.description}}"></paper-input>
+                </div>
+            </template>
+        </dom-repeat>
+    </template>
+
+    <script>
+        class MyAdmin extends SingleBehaviors {
+            constructor() {
+                super();
+            }
+
+            static get is() {
+                return 'my-admin';
+            };
+
+            static get properties() {
+                return {
+                    hidden: {
+                        type: Boolean,
+                        value: false,
+                    },
+                    data: Object
+                };
+            }
+
+            showItem(item) {
+                if (item.link === "") {
+                    return true;
+                }
+            }
+
+            getImageSrc(item) {
+                let link = item.link;
+
+                return link.replace("upload", "dlC");
+            }
+        }
+        window.customElements.define(MyAdmin.is, MyAdmin);
+    </script>
+</dom-module>
