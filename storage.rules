@@ -1,24 +1,19 @@
 service firebase.storage {
-    match / b / {
-        bucket
-    }
-    /o {
-    match / download {
+    match /b/{bucket}/o {
+    match /download {
         // Anyone valid user can view any image
-        match / {
-            allImages = **
-        } {
+        match /{allImages=**} {
             allow read: if request.auth != null;
         }
     }
 
     // Only authenticated users can write to "upload" images
-    match / upload / {
-        allImages = **
-    } {
-        allow write: if isAdmin(request);
+    match /upload {
+        match /{allImages=**} {
+          allow write: if isAdmin(request);
+        }
     }
-}
+  }
 }
 
 function isAdmin(r) {
