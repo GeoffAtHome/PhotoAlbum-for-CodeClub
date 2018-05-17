@@ -13,3 +13,4 @@ build/*
 functions/node_modules/*
 functions/lib/*
 functions/etc/*
+firebase-debug.log

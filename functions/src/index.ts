@@ -27,14 +27,13 @@ exports.onFileChange = functions.storage.object('/upload/').onFinalize(event => 
     const metadata = { contentType: event.contentType };
 
     const sizes = {
-        C: '60x60',
-        S: '140x140',
+        // C: '60x60',
+        // S: '140x140',
         M: '300x300',
-        L: '800x800',
+        // L: '800x800',
         X: '1920x1920'
     };
     const files = [];
-    const fileURLs = [];
 
     return bucket.file(filePath).download({
         destination: srcFilePath
@@ -44,7 +43,6 @@ exports.onFileChange = functions.storage.object('/upload/').onFinalize(event => 
         for (const size in sizes) {
             const destination = path.join('dl' + size, path.basename(filePath));
             files.push(destination);
-            console.log("Destination :" + destination);
             const p = ResizeImage(srcFilePath, resizedFilePath, bucket, metadata, destination, sizes[size])
 
             promises.push(p);
@@ -66,28 +64,31 @@ exports.onFileChange = functions.storage.object('/upload/').onFinalize(event => 
             const p = file.getSignedUrl(config);
             promises.push(p)
         }
-
-        /*
-        for (const filename in files) {
-            console.log("File name: " + filename);
-
-            const p = functions.storage.ref(filename).getDownloadURL().then(function (url) {
-                console.log("File URL: " + url);
-                fileURLs.push(url);
-            });
-            promises.push(p)
-        } */
         return Promise.all(promises);
     }).then((results) => {
-        console.log('Results: ' + JSON.stringify(results));
-        for (const fileURL in fileURLs) {
-            console.log("Result: " + fileURL);
+        const links = [];
+        for (const r of results) {
+            links.push(r);
         }
+        const albumListRef = admin.database().ref('images');
+        albumListRef.once("value", (snapshot) => {
+            console.log("Updating snapshot");
+            console.log(snapshot.val());
+            if (snapshot.val() !== null) {
+                snapshot.val().items.push({ title: "", description: "", links: links })
+                return albumListRef.update(snapshot);
+            }
+            const document = { description: "", title: "", items: [] };
+            document.items.push({ title: "", description: "", links: links })
+            return albumListRef.update(document);
 
-        for (const r in results) {
-            console.log("R: " + r);
-            console.log("U: " + r[0]);
-        }
+        }, (errorObject) => {
+            console.log("The read failed: " + errorObject.code);
+            const document = { description: "", title: "", items: [] };
+            document.items.push({ title: "", description: "", links: links })
+            return albumListRef.update(document);
+        });
+
     });
 });
 
