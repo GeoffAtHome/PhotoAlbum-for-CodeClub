@@ -11,11 +11,14 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
-<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="single-behaviors.html">
 
 
@@ -43,15 +46,27 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 min-height: 150px;
             }
         </style>
-        <firebase-document app-name="login" path="album" data="{{data}}"></firebase-document>
-        <paper-input label="Album description:" value="{{data.description}}"></paper-input>
+        <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
+        <firebase-document app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-document>
+        <h1>Admin</h1>
+        <paper-dropdown-menu label="Select album" on-selected-item-changed="selectItemChanged">
+            <paper-listbox id="listbox" slot="dropdown-content">
+                <dom-repeat items="[[albums.items]]">
+                    <template>
+                        <paper-item name$="[[index]]">[[item.title]]</paper-item>
+                    </template>
+                </dom-repeat>
+            </paper-listbox>
+        </paper-dropdown-menu>
         <paper-input label="Album title:" value="{{data.title}}"></paper-input>
+        <paper-input label="Album description:" value="{{data.description}}"></paper-input>
         <dom-repeat items="{{data.items}}">
             <template>
                 <div hidden$="[[showItem(item)]]">
                     <iron-image class="photo-item" sizing="contain" preload fade src="[[getImageSrc(item)]]"></iron-image>
                     <paper-input label="Title:" value="{{item.title}}"></paper-input>
                     <paper-input label="Description:" value="{{item.description}}"></paper-input>
+                    <h2>[[getDownloadURL(item)]]</h2>
                 </div>
             </template>
         </dom-repeat>
@@ -69,12 +84,19 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 
             static get properties() {
                 return {
+                    firebaseApp: Object,
                     hidden: {
                         type: Boolean,
                         value: false,
                     },
+                    albumPath: String,
                     data: Object,
-                    userdata: Object
+                    albums: Object,
+                    userdata: Object,
+                    list: {
+                        type: Array,
+                        value: []
+                    }
                 };
             }
 
@@ -88,6 +110,27 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 let link = item.link;
 
                 return link;
+            }
+
+            getDownloadURL(item) {
+                const path = 'upload/' + item.file;
+                // Create a reference with an initial file path and name
+                var storage = firebase.storage(this.firebaseApp.app);
+                var pathReference = storage.ref(path);
+                item.src = "";
+                pathReference.getDownloadURL().then(url => {
+                    this.list.push(url);
+                }).catch(function (error) {
+                    // Handle any errors
+                });
+                return item.src;
+            }
+
+            selectItemChanged(e) {
+                if (e.detail.value !== null) {
+                    let index = e.detail.value.getAttribute("name");
+                    this.albumPath = "album/" + this.albums.items[index].key;
+                }
             }
         }
         window.customElements.define(MyAdmin.is, MyAdmin);

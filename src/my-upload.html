@@ -15,7 +15,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
-<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -47,7 +46,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="card">
             <h1>Upload</h1>
 
-            <paper-dropdown-menu label="Select album" selected-item-changed="selectItemChanged">
+            <paper-dropdown-menu label="Select album">
                 <paper-listbox id="listbox" slot="dropdown-content" selected="1">
                     <dom-repeat items="[[albums.items]]">
                         <template>
@@ -125,10 +124,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.$.listbox.selected = this.albums.items.indexOf(existing);
                 }
 
-            }
-
-            selectItemChanged(e) {
-                console.log(e);
             }
 
             addNewAlbum(title) {
