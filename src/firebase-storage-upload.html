@@ -152,7 +152,10 @@ Upload files to firebase storage bucket
 						this.dispatchEvent(new CustomEvent('new-url', {
 							bubbles: true,
 							composed: true,
-							detail: this.uploadTask.snapshot.metadata.downloadURLs[0]
+							detail: {
+								file: file.name,
+								url: this.uploadTask.snapshot.metadata.downloadURLs[0]
+							}
 						}));
 					}
 				);
