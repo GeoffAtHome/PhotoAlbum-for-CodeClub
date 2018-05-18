@@ -120,12 +120,18 @@ Polymer applications are easy theme. Themes can be created using this [tool](htt
 ## TODO - missing features
 1. Securing the application so that only authorised users can login and see the photos.
 
-2. Uploading photos
+2. ~~Uploading photos~~
 
-3. Creating new albums
+3. ~~Creating new albums~~
 
-4. Editing descriptions
+4. ~~Editing descriptions~~
 
 5. Messaging
 
 6. Ranking photos 
+
+7. ~~Logout button~~
+
+8. Resizing images on firebase
+
+9. Consuming resized images from firebase
