@@ -8,28 +8,44 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
-<link rel="import" href="xml-reader.html">
 <link rel="import" href="single-content.html">
 
 <dom-module id="single-view">
     <template>
         <style>
-             :host {
+            :host {
                 display: block;
                 overflow: hidden;
             }
 
-             :host([hidden]) {
+            :host([hidden]) {
                 display: none !important;
             }
 
-             :focus {
+            :focus {
                 outline: none;
             }
         </style>
-        <xml-reader xml-url="[[getPath()]]" xml-data="{{xmlData}}" loading="{{mainLoading}}"></xml-reader>
-        <single-content id="main" active-page="[[activePage]]" selected-item="[[selectedItem]]" xml-data="[[xmlData]]"></single-content>
+        <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
+        <firebase-document app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-document>
+        <paper-dropdown-menu label="Select album" on-selected-item-changed="selectItemChanged">
+            <paper-listbox id="listbox" slot="dropdown-content">
+                <dom-repeat items="[[albums.items]]">
+                    <template>
+                        <paper-item name$="[[index]]">[[item.title]]</paper-item>
+                    </template>
+                </dom-repeat>
+            </paper-listbox>
+        </paper-dropdown-menu>
+        <single-content id="main" active-page="[[activePage]]" selected-item="[[selectedItem]]" data="[[data]]"></single-content>
     </template>
 
     <script>
@@ -45,15 +61,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         value: true,
                         notify: true,
                     },
-                    // Url for JSON to load
-                    path: {
-                        type: String
-                    },
-                    // JSON Data
-                    xmlData: {
-                        type: Object,
-                        notify: true
-                    },
+                    albumPath: String,
+                    data: Object,
+                    albums: Object,
                     // Item selected - this will be the same value in both the photo list and actual slide
                     selectedItem: {
                         type: String
@@ -80,12 +90,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 window.addEventListener('exitSlideShow', () => this._exitSlideShow());
             }
 
-            getPath() {
-                let path = '../gallery/gallery';
-
-                return path;
-            }
-
             _slide(e) {
                 this.selectedItem = e.detail;
                 this.activePage = false;
@@ -102,6 +106,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             _exitSlideShow() {
                 this._stopSlideShow();
                 this.activePage = !this.activePage;
+            }
+            selectItemChanged(e) {
+                if (e.detail.value !== null) {
+                    let index = e.detail.value.getAttribute("name");
+                    this.albumPath = "album/" + this.albums.items[index].key;
+                }
             }
         }
 

@@ -13,27 +13,10 @@ A simple photo album for Code Club.
         npm install -g bower
 
 
-* Third, install [Firebase CLI](https://github.com/firebase/firebase-tools) using [npm](https://www.npmjs.com)
+* Finally, install [Firebase CLI](https://github.com/firebase/firebase-tools) using [npm](https://www.npmjs.com)
 
         npm install -g firebase-tools
 
-
-* Finally, install [ImageMagick](https://www.imagemagick.org/script/download.php)
-
-Find the right version for your environment. Assuming that you are using Windows install "Win32 static at 8 bits-per-pixel component"
-
-## Seting up the gallery
-The images you want in your gallery must be copied into the **/galley** directory.
-
-Update **gallery.json** to reference your images and to add descriptions as required.
-
-**buildimages.cmd** must be configured to include the path to magick.exe. This is path to where ImageMagick was installed during was installed about. Adjust the line:
-
-    set IM="C:\Program Files (x86)\ImageMagick-7.0.7-Q8\magick.exe"
- 
-As appropriate. With the default installation of ImageMagick this may not need to be changed.
-
-Run **buildimages.cmd** to create the thumbnails for your gallery. Thumbnails are required as images can be large and loading these over the internet on a mobile connection can be slow.
 
 ## Installing the bower components
 The bower components are the third-party polymer elements required for the applications. To install run:

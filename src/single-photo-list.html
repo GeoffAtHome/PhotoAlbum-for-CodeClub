@@ -12,23 +12,21 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 -->
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
-<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
-<link rel="import" href="single-behaviors.html">
 
 
 <dom-module id="single-photo-list">
     <template>
         <style>
-             :host {
+            :host {
                 display: block;
                 height: 100%;
                 background-color: var(--paper-grey-100);
             }
 
-             :host([hidden]) {
+            :host([hidden]) {
                 display: none !important;
             }
 
@@ -57,26 +55,21 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 text-align: center;
             }
         </style>
-        <iron-scroll-threshold id="pListViewTheshold" lower-threshold="500" on-lower-threshold="_loadMoreData" scroll-target="plistView">
-            <iron-list id="plistView" role="listbox" grid selected="[[selectedItem]]" items="[]" as="item">
-                <template>
-                    <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" list-index$="[[item.link]]" url$="[[getUrlIndex(item, xmlData)]]"
-                        on-tap="_selectItem">
-                        <div>
-                            <iron-image class="photo-item" sizing="contain" preload fade src="[[getTagImage(item,xmlData)]]"></iron-image>
-                            <h3>[[item.description]]</h3>
-                        </div>
-                    </paper-button>
-                </template>
-            </iron-list>
-        </iron-scroll-threshold>
+        <iron-list id="plistView" role="listbox" grid items="[[data.items]]" as="item">
+            <template>
+                <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" list-index$="[[item.file]]" url$="[[item.large]]"
+                    on-tap="_selectItem">
+                    <div>
+                        <iron-image class="photo-item" sizing="contain" preload fade src="[[item.thumbnail]]"></iron-image>
+                        <h3>[[item.description]]</h3>
+                    </div>
+                </paper-button>
+            </template>
+        </iron-list>
     </template>
 
     <script>
-        class SinglePhotoList extends SingleBehaviors {
-            constructor() {
-                super();
-            }
+        class SinglePhotoList extends Polymer.Element {
 
             static get is() {
                 return 'single-photo-list';
@@ -88,52 +81,25 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                         type: Boolean,
                         value: false,
                     },
+                    selectedItem: String,
+                    selectedIndex: {
+                        type: Number,
+                        value: -1,
+                        notify: true,
+                    },
                     currentIndex: {
                         type: Number,
                         value: 0,
                     },
+                    data: Object
                 };
             }
-
-            static get observers() {
-                return ['_dataChanged(xmlData, hide)'];
-            }
-
-            _dataChanged(xmlData, hide) {
-                if (!hide) {
-                    var thisList = this.$.plistView;
-                    this.once = false;
-                    this.currentIndex = 0;
-                    thisList.items = [];
-                    this._loadMoreData();
-                    setTimeout(function () {
-                        this.dispatchEvent(new CustomEvent('iron-resize', {
-                            bubbles: true,
-                            composed: true
-                        }));
-                    }, 0);
-                }
-            };
 
             resize() {
                 this.dispatchEvent(new CustomEvent('iron-resize', {
                     bubbles: true,
                     composed: true
                 }));
-            };
-
-            _loadMoreData() {
-                if (this.xmlData) {
-                    var start = this.currentIndex;
-                    var end = Math.min(this.xmlData.items.length, start + 20);
-                    this.currentIndex = end;
-                    while (start < end) {
-                        this.$.plistView.push('items', this.xmlData.items[start]);
-                        start++;
-                    }
-                    // Clear the lower threshold so we can load more data when the user scrolls down again.
-                    this.$.pListViewTheshold.clearTriggers();
-                }
             };
         }
         window.customElements.define(SinglePhotoList.is, SinglePhotoList);

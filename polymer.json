@@ -13,8 +13,7 @@
   ],
   "sources": [
     "src/**/*",
-    "images/**/*",
-    "gallery/**/*"
+    "images/**/*"
   ],
   "extraDependencies": [
     "manifest.json",

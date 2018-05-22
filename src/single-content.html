@@ -16,18 +16,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="single-content">
     <template>
         <style>
-             :host {
+            :host {
                 display: inline-block;
                 width: 100%;
                 height: 100%;
             }
 
-             :focus {
+            :focus {
                 outline: none;
             }
         </style>
-        <single-photo-list id="photoList" hidden$="[[showPhotos(activePage)]]" xml-data="[[xmlData]]" selected-item="[[selectedItem]]"></single-photo-list>
-        <single-slide-list id="slideList" hidden$="[[showSlides(activePage)]]" xml-data="[[xmlData]]" selected-item="[[selectedItem]]"></single-slide-list>
+        <single-photo-list id="photoList" hidden$="[[showPhotos(activePage)]]" data="[[data]]" selected-item="[[selectedItem]]"></single-photo-list>
+        <single-slide-list id="slideList" hidden$="[[showSlides(activePage)]]" data="[[data]]" selected-item="[[selectedItem]]"></single-slide-list>
     </template>
     <script>
         class SingleContent extends Polymer.Element {
@@ -41,10 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             static get properties() {
                 return {
-                    xmlData: {
-                        type: Object,
-                        notify: true
-                    },
+                    data: Object,
                     activePage: {
                         type: Boolean,
                         value: false,
