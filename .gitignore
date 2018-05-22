@@ -10,7 +10,9 @@ bower_components/*
 
 # Ignore build directory as this is recreated by running polymer build
 build/*
+node_modules/*
 functions/node_modules/*
 functions/lib/*
 functions/etc/*
 firebase-debug.log
+

@@ -2,11 +2,13 @@
   "entrypoint": "index.html",
   "shell": "src/my-login.html",
   "fragments": [
-    "src/my-home.html",
     "src/my-about.html",
+    "src/my-admin.html",
     "src/my-app.html",
-    "src/my-gallery.html",
     "src/my-contact.html",
+    "src/my-gallery.html",
+    "src/my-home.html",
+    "src/my-upload.html",
     "src/my-view404.html"
   ],
   "sources": [

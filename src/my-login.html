@@ -31,18 +31,18 @@
 
         <firebase-app id="firebaseApp" name="login" api-key="AIzaSyBzdWAPMDiLpChNHKAhVePegFFvC6Bbfgk" auth-domain="my-album-e93c4.firebaseapp.com"
             database-url="https://my-album-e93c4.firebaseio.com" project-id="my-album-e93c4" storage-bucket="my-album-e93c4.appspot.com"
-            messaging-sender-id="676833000821" </firebase-app>
-            <div hidden$="[[!offline]]">
-                <h1>Sorry you are currently off line and cannot login</h1>
+            messaging-sender-id="676833000821"></firebase-app>
+        <div hidden$="[[!offline]]">
+            <h1>Sorry you are currently off line and cannot login</h1>
+        </div>
+        <div hidden$="[[offline]]">
+            <div class="spx" loading$="[[!signedIn]]">
+                <h1>Welcome to Geoff's photo album</h1>
+                <login-fire id="auth" app-name="login" providers="google" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
             </div>
-            <div hidden$="[[offline]]">
-                <div class="spx" loading$="[[!signedIn]]">
-                    <h1>Welcome to Geoff's photo album</h1>
-                    <login-fire id="auth" app-name="login" providers="google" user="{{user}}" signed-in="{{signedIn}}"></login-fire>
-                </div>
-            </div>
-            <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]"
-                user="[[user]]" userdata="[[userdata]]"></my-app>
+        </div>
+        <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]"
+            user="[[user]]" userdata="[[userdata]]"></my-app>
     </template>
     <script>
         class MyLogin extends Polymer.Element {

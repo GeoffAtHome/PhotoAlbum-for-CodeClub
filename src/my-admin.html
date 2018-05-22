@@ -20,6 +20,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="single-behaviors.html">
+<link rel="import" href="my-image.html">
 
 
 <dom-module id="my-admin">
@@ -63,20 +64,14 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
         <dom-repeat items="{{data.items}}">
             <template>
                 <div hidden$="[[showItem(item)]]">
-                    <iron-image class="photo-item" sizing="contain" preload fade src="[[getImageSrc(item)]]"></iron-image>
-                    <paper-input label="Title:" value="{{item.title}}"></paper-input>
-                    <paper-input label="Description:" value="{{item.description}}"></paper-input>
-                    <h2>[[getDownloadURL(item)]]</h2>
+                    <my-image image="{{item}}" firebase-app="[[firebaseApp]]"></my-image>
                 </div>
             </template>
         </dom-repeat>
     </template>
 
     <script>
-        class MyAdmin extends SingleBehaviors {
-            constructor() {
-                super();
-            }
+        class MyAdmin extends Polymer.Element {
 
             static get is() {
                 return 'my-admin';
@@ -91,12 +86,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                     },
                     albumPath: String,
                     data: Object,
-                    albums: Object,
-                    userdata: Object,
-                    list: {
-                        type: Array,
-                        value: []
-                    }
+                    albums: Object
                 };
             }
 
@@ -104,26 +94,6 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 if (item.link === "") {
                     return true;
                 }
-            }
-
-            getImageSrc(item) {
-                let link = item.link;
-
-                return link;
-            }
-
-            getDownloadURL(item) {
-                const path = 'upload/' + item.file;
-                // Create a reference with an initial file path and name
-                var storage = firebase.storage(this.firebaseApp.app);
-                var pathReference = storage.ref(path);
-                item.src = "";
-                pathReference.getDownloadURL().then(url => {
-                    this.list.push(url);
-                }).catch(function (error) {
-                    // Handle any errors
-                });
-                return item.src;
             }
 
             selectItemChanged(e) {

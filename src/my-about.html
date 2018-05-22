@@ -38,16 +38,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <fi <div class="card">
-      <h1>About</h1>
-      <div class="flex">
-        <p>About Text Here. </p>
-        <p>Welcome, [[userdata.username]] </p>
-        <p>email: [[userdata.email]]</p>
+    <div>
+      <div class="card">
+        <h1>About</h1>
+        <div class="flex">
+          <p>About Text Here. </p>
+          <p>Welcome, [[userdata.username]] </p>
+          <p>email: [[userdata.email]]</p>
+        </div>
+        <firebase-query path="album" data="{{data}}"></firebase-query>
       </div>
-      <firebase-query path="album" data="{{data}}"></firebase-query>
-      </div>
-      </div>
+    </div>
   </template>
 
   <script>
