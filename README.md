@@ -42,25 +42,33 @@ The bower components are the third-party polymer elements required for the appli
 
 ## Linking with firebase
 To allow authentication with Firebase you need to update **src/login.html**. Find the line
-        <firebase-app name="login" api-key="AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA" auth-domain="my-gallery-2a3ac.firebaseapp.com"
-            database-url="https://my-gallery-2a3ac.firebaseio.com" project-id="my-gallery-2a3ac" storage-bucket="my-gallery-2a3ac.appspot.com"
-            messaging-sender-id="574210347790"></firebase-app>
+    config: {
+        type: Object,
+        value: {
+            apiKey: "AIzaSyBzdWAPMDiLpChNHKAhVePegFFvC6Bbfgk",
+            authDomain: "my-album-e93c4.firebaseapp.com",
+            databaseURL: "https://my-album-e93c4.firebaseio.com",
+            projectId: "my-album-e93c4",
+            storageBucket: "my-album-e93c4.appspot.com",
+            messagingSenderId: "676833000821"
+        }
+    },
 
-And replace **api-key**,**auth-domain** etc. with the details obtained from your [Firebase console](https://console.firebase.google.com) for your application. These should look like:
+And replace **apiKey**,**authDomain** etc. with the details obtained from your [Firebase console](https://console.firebase.google.com) for your application. These should look like:
 
-    apiKey: "AIzaSyAbAlZGptqCpYg8LNGTJsNqYkMzKnXMNlA",
-    authDomain: "my-gallery-2a3ac.firebaseapp.com",
-    databaseURL: "https://my-gallery-2a3ac.firebaseio.com",
-    projectId: "my-gallery-2a3ac",
-    storageBucket: "my-gallery-2a3ac.appspot.com",
-    messagingSenderId: "574210347790"
+    apiKey: "AIzaSyBzdWAPMDiLpChNHKAhVePegFFvC6Bbfgk",
+    authDomain: "my-album-e93c4.firebaseapp.com",
+    databaseURL: "https://my-album-e93c4.firebaseio.com",
+    projectId: "my-album-e93c4",
+    storageBucket: "my-album-e93c4.appspot.com",
+    messagingSenderId: "676833000821"
 
 
 In addition, update **.firebaserc** with your projectId.
 
 {
   "projects": {
-    "default": "my-gallery-2a3ac"
+    "default": "my-album-e93c4"
   }
 }
 

@@ -29,9 +29,8 @@
             }
         </style>
 
-        <firebase-app id="firebaseApp" name="login" api-key="AIzaSyBzdWAPMDiLpChNHKAhVePegFFvC6Bbfgk" auth-domain="my-album-e93c4.firebaseapp.com"
-            database-url="https://my-album-e93c4.firebaseio.com" project-id="my-album-e93c4" storage-bucket="my-album-e93c4.appspot.com"
-            messaging-sender-id="676833000821"></firebase-app>
+        <firebase-app id="firebaseApp" name="login" api-key="[[config.apiKey]]" auth-domain="[[config.authDomain]]" database-url="[[config.databaseURL]]"
+            storage-bucket="[[config.storageBucket]]" messaging-sender-id="[[config.messagingSenderId]]"></firebase-app>
         <div hidden$="[[!offline]]">
             <h1>Sorry you are currently off line and cannot login</h1>
         </div>
@@ -52,6 +51,19 @@
 
             static get properties() {
                 return {
+
+                    // Initialize Firebase
+                    config: {
+                        type: Object,
+                        value: {
+                            apiKey: "AIzaSyBzdWAPMDiLpChNHKAhVePegFFvC6Bbfgk",
+                            authDomain: "my-album-e93c4.firebaseapp.com",
+                            databaseURL: "https://my-album-e93c4.firebaseio.com",
+                            projectId: "my-album-e93c4",
+                            storageBucket: "my-album-e93c4.appspot.com",
+                            messagingSenderId: "676833000821"
+                        }
+                    },
                     firebaseApp: Object,
                     user: Object,
                     statusKnown: Object,
