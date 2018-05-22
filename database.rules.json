@@ -1,10 +1,6 @@
 {
   "rules": {
-    "users": {
-      "$user": {
-        ".write": "auth != null && !data.exists()"
-      }
-    },
-    ".read": "auth != null"
+    ".read": "auth != null",
+    ".write": "auth != null"
   }
 }

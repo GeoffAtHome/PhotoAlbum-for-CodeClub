@@ -9,11 +9,7 @@
         ]
     },
     "hosting": {
-        "public": "build/es5-bundled",
-        "rewrites": [{
-            "source": "**",
-            "destination": "/index.html"
-        }]
+        "public": "build/es5-bundled"
     },
     "storage": {
         "rules": "storage.rules"

@@ -24,6 +24,10 @@
     "rules": ["polymer-2"]
   },
   "builds": [{
-    "preset": "es5-bundled"
+    "preset": "es5-bundled",
+    "js": {
+      "minify": true,
+      "compile": false
+    }
   }]
 }

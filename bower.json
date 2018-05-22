@@ -27,7 +27,8 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.1.0",
-    "web-animations-js": "^2.3.1"
+    "web-animations-js": "^2.3.1",
+    "paper-toast": "PolymerElements/paper-toast#^2.1.1"
   },
   "resolutions": {
     "polymer": "^2.0.0"
