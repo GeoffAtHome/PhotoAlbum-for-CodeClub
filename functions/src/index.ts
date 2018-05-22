@@ -93,7 +93,7 @@ exports.onFileChange = functions.storage.object('/upload/').onFinalize(event => 
 });
 
 function ResizeImage(srcFilePath, resizedFilePath, destBucket, metadata, destination, size) {
-    return spawn('convert', [srcFilePath, '-resize', size, resizedFilePath]).then(() => {
+    return spawn('convert', [srcFilePath, '-auto-orient', '-resize', size, resizedFilePath]).then(() => {
         return destBucket.upload(resizedFilePath, {
             destination: destination,
             metadata: metadata
