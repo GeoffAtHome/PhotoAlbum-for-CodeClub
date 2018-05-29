@@ -49,7 +49,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
         <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
         <firebase-document app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-document>
         <h1>Admin</h1>
-        <paper-dropdown-menu label="Select album" on-selected-item-changed="selectItemChanged">
+        <paper-dropdown-menu label="Select album" on-selected-item-changed="_selectedItemChanged">
             <paper-listbox id="listbox" slot="dropdown-content">
                 <dom-repeat items="[[albums.items]]">
                     <template>
@@ -96,7 +96,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 }
             }
 
-            selectItemChanged(e) {
+            _selectedItemChanged(e) {
                 if (e.detail.value !== null) {
                     let index = e.detail.value.getAttribute("name");
                     this.albumPath = "album/" + this.albums.items[index].key;
