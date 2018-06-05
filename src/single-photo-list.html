@@ -58,8 +58,8 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
         </style>
         <iron-list id="plistView" role="listbox" grid items="[[data.items]]" as="item">
             <template>
-                <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" list-index$="[[item.file]]" url$="[[item.large]]"
-                    on-tap="_selectItem">
+                <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" index$="[[index]]" list-index$="[[item.file]]"
+                    url$="[[item.large]]" on-tap="_selectItem">
                     <div>
                         <iron-image class="photo-item" sizing="contain" preload fade src="[[item.thumbnail]]"></iron-image>
                         <h3>[[item.description]]</h3>
@@ -102,6 +102,16 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                     composed: true
                 }));
             };
+
+            _selectItem(e) {
+                let index = e.currentTarget.attributes.index.value;
+                this.dispatchEvent(new CustomEvent('slide', {
+                    bubbles: true,
+                    composed: true,
+                    detail: index
+                }));
+            };
+
         }
         window.customElements.define(SinglePhotoList.is, SinglePhotoList);
     </script>

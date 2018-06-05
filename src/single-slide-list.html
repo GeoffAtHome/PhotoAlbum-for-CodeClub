@@ -77,7 +77,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </skeleton-carousel>
     </template>
     <script>
-        class SingleSlideList extends Polymer.mixinBehaviors([Polymer.IronA11yKeysBehavior]) {
+        class SingleSlideList extends Polymer.mixinBehaviors([
+            Polymer.IronA11yKeysBehavior,
+        ], Polymer.Element) {
             constructor() {
                 super();
             }
@@ -111,10 +113,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             // Observers
             _newPageSelected(newVal, oldVal) {
-                let newPage = this.xmlData.items.find(s => s.link == newVal);
+                let newPage = this.data.items[newVal];
                 if (typeof newPage !== 'undefined') {
                     // Stop the animation of hidden pages
-                    this.selected = this.xmlData.items.indexOf(newPage);
+                    this.selected = this.data.items.indexOf(newPage);
                 } else {
                     this.selected = 0;
                 }
