@@ -67,9 +67,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <paper-icon-button id="startSlideShow" class="pl" play$="[[play]]" icon="my-icons:play-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
         <paper-icon-button class="fs" icon="my-icons:close" on-tap="exitSlideShow"></paper-icon-button>
         <skeleton-carousel nav dots id="carousel" auto="[[play]]" selected="[[selected]]" disable-keys="true" loop>
-            <template is="dom-repeat" items="[[data.items]]">
+            <template is="dom-repeat" items="[[data]]">
                 <div>
-                    <iron-image placeholder="[[item.thumbnail]]" sizing="contain" preload="" fade="" data-src$="[[item.large]]">
+                    <iron-image placeholder="[[item.thumb]]" sizing="contain" preload="" fade="" data-src$="[[item.big]]">
                     </iron-image>
                     <h3>[[item.description]]</h3>
                 </div>
@@ -113,10 +113,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             // Observers
             _newPageSelected(newVal, oldVal) {
-                let newPage = this.data.items[newVal];
+                let newPage = this.data[newVal];
                 if (typeof newPage !== 'undefined') {
                     // Stop the animation of hidden pages
-                    this.selected = this.data.items.indexOf(newPage);
+                    this.selected = this.data.indexOf(newPage);
                 } else {
                     this.selected = 0;
                 }

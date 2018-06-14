@@ -56,12 +56,12 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 text-decoration: none;
             }
         </style>
-        <iron-list id="plistView" role="listbox" grid items="[[data.items]]" as="item">
+        <iron-list id="plistView" role="listbox" grid items="[[data]]" as="item">
             <template>
                 <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" index$="[[index]]" list-index$="[[item.file]]"
                     url$="[[item.large]]" on-tap="_selectItem">
                     <div>
-                        <iron-image class="photo-item" sizing="contain" preload fade src="[[item.thumbnail]]"></iron-image>
+                        <iron-image class="photo-item" sizing="contain" preload fade src="[[item.thumb]]"></iron-image>
                         <h3>[[item.description]]</h3>
                     </div>
                 </paper-button>

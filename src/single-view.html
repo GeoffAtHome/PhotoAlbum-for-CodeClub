@@ -34,11 +34,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 outline: none;
             }
         </style>
-        <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
-        <firebase-document app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-document>
+        <firebase-query app-name="login" path="albums" data="{{albums}}"></firebase-query>
+        <firebase-query app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-query>
         <paper-dropdown-menu label="Select album" on-selected-item-changed="selectItemChanged">
             <paper-listbox id="listbox" slot="dropdown-content">
-                <dom-repeat items="[[albums.items]]">
+                <dom-repeat items="[[albums]]">
                     <template>
                         <paper-item name$="[[index]]">[[item.title]]</paper-item>
                     </template>
@@ -62,8 +62,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         notify: true,
                     },
                     albumPath: String,
-                    data: Object,
-                    albums: Object,
+                    data: Array,
+                    albums: Array,
                     // Item selected - this will be the same value in both the photo list and actual slide
                     selectedItem: {
                         type: String
@@ -110,7 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             selectItemChanged(e) {
                 if (e.detail.value !== null) {
                     let index = e.detail.value.getAttribute("name");
-                    this.albumPath = "album/" + this.albums.items[index].key;
+                    this.albumPath = "album/" + this.albums[index].albumKey;
                 }
             }
         }

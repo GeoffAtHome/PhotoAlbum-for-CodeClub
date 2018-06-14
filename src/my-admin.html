@@ -46,21 +46,22 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 min-height: 150px;
             }
         </style>
-        <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
-        <firebase-document app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-document>
+        <firebase-query app-name="login" path="albums" data="{{albums}}"></firebase-query>
+        <firebase-document app-name="login" path="[[selectedAlbumPath]]" data="{{selectedAlbum}}"></firebase-document>
+        <firebase-query app-name="login" path="[[albumPath]]" data="{{data}}"></firebase-query>
         <h1>Admin</h1>
         <paper-dropdown-menu label="Select album" on-selected-item-changed="_selectedItemChanged">
             <paper-listbox id="listbox" slot="dropdown-content">
-                <dom-repeat items="[[albums.items]]">
+                <dom-repeat items="[[albums]]">
                     <template>
                         <paper-item name$="[[index]]">[[item.title]]</paper-item>
                     </template>
                 </dom-repeat>
             </paper-listbox>
         </paper-dropdown-menu>
-        <paper-input label="Album title:" value="{{data.title}}"></paper-input>
-        <paper-input label="Album description:" value="{{data.description}}"></paper-input>
-        <dom-repeat items="{{data.items}}">
+        <paper-input label="Album title:" value="{{selectedAlbum.title}}"></paper-input>
+        <paper-input label="Album description:" value="{{selectedAlbum.description}}"></paper-input>
+        <dom-repeat items="{{data}}">
             <template>
                 <div hidden$="[[showItem(item)]]">
                     <my-image image="{{item}}" firebase-app="[[firebaseApp]]"></my-image>
@@ -84,8 +85,13 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                         value: false,
                     },
                     albumPath: String,
-                    data: Object,
-                    albums: Object,
+                    data: Array,
+                    albums: Array,
+                    selectedAlbum: {
+                        type: Object,
+                        observer: '_selectedAlbumChanged'
+                    },
+                    selectedAlbumPath: String,
                     userdata: Object
                 };
             }
@@ -95,11 +101,15 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                     return true;
                 }
             }
+            _selectedAlbumChanged() {
+                this.albumPath = "album/" + this.selectedAlbum.albumKey;
+            }
 
             _selectedItemChanged(e) {
                 if (e.detail.value !== null) {
                     let index = e.detail.value.getAttribute("name");
-                    this.albumPath = "album/" + this.albums.items[index].key;
+                    this.selectedAlbumPath = "albums/" + this.albums[index].$key;
+                    this.albumPath = "album/" + this.selectedAlbum.albumKey;
                 }
             }
         }

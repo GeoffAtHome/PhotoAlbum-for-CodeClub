@@ -42,13 +42,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
 
-        <firebase-document app-name="login" path="albums" data="{{albums}}"></firebase-document>
+        <firebase-query app-name="login" path="albums" data="{{albums}}"></firebase-query>
         <div class="card">
             <h1>Upload</h1>
 
             <paper-dropdown-menu label="Select album">
                 <paper-listbox id="listbox" slot="dropdown-content" selected="1" on-selected-item-changed="_selectedItemChanged">
-                    <dom-repeat items="[[albums.items]]">
+                    <dom-repeat items="[[albums]]">
                         <template>
                             <paper-item name$="[[index]]">[[item.title]]</paper-item>
                         </template>
@@ -65,8 +65,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </div>
                 <div class="upload" hidden$="[[!userdata.roles.admin]]">
                     <p>Select the files to upload.</p>
-                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" url="[[url]]" name="login" label="Upload label" ref="/upload/"
-                        accept="image/jpeg,image/jpeg,image/png" progress="{{progress}}">
+                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" url="[[url]]" name="login" album-key="[[currentAlbum.albumKey]]"
+                        label="Upload label" ref="/newupload/" accept="image/jpeg,image/jpeg,image/png" progress="{{progress}}">
 
                         <paper-progress value="[[progress]]"></paper-progress>
                     </firebase-storage-upload>
@@ -83,8 +83,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             static get properties() {
                 return {
                     albums: {
-                        type: Object,
-                        value: null
+                        type: Array,
+                        value: []
                     },
                     firebaseApp: Object,
                     userdata: Object,
@@ -102,60 +102,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             _createNewAlbum() {
                 if (this.newAlbum !== "") {
-                    let albumsListRef = firebase.database(this.firebaseApp.app).ref('albums');
-                    if (this.albums.items === undefined) {
-                        this.albums = {
-                            items: []
-                        };
-                    }
                     // Already in the list?
-                    let existing = this.albums.items.find(x => x.title == this.newAlbum)
+                    let existing = this.albums.find(x => x.title == this.newAlbum)
                     if (existing == undefined) {
-                        let key = this.addNewAlbum(this.newAlbum);
+                        const albumsListRef = firebase.database(this.firebaseApp.app).ref('albums');
                         existing = {
                             title: this.newAlbum,
                             description: "",
-                            key: key
-                        };
-                        this.albums.items.push(existing);
-                    }
-                    this.currentAlbum = existing;
-                    albumsListRef.update(this.albums);
-                    this.$.listbox.selected = this.albums.items.indexOf(existing);
-                }
+                            albumKey: this.addNewAlbum()
 
+                        };
+                        const newAlbumRef = albumsListRef.push(existing);
+                        this.currentAlbum = existing;
+                        existing = this.albums.find(x => x.title == this.newAlbum);
+                    }
+                    // Select the created album
+                    this.$.listbox.selected = this.albums.indexOf(existing);
+                }
             }
+
             _selectedItemChanged(e) {
                 if (e.detail.value !== null) {
                     let index = e.detail.value.getAttribute("name");
-                    this.currentAlbum = this.albums.items[index];
+                    this.currentAlbum = this.albums[index];
+                    this.key = this.currentAlbum.key;
                 }
             }
 
-            addNewAlbum(title) {
+            addNewAlbum() {
                 const albumListRef = firebase.database(this.firebaseApp.app).ref('album');
-                const newPostRef = albumListRef.push();
-                newPostRef.set({
-                    title: title,
-                    description: "",
-                    link: []
-                });
+                const newPostRef = albumListRef.push(true);
                 return newPostRef.key;
             }
 
             // Add the new URL to database for the album
             _newurl() {
-                let albumListRef = firebase.database(this.firebaseApp.app).ref('album/' + this.currentAlbum.key);
-                if (this.currentAlbum.items == undefined) {
-                    this.currentAlbum.items = [];
-                }
-                this.currentAlbum.items.push({
-                    title: "",
-                    original: event.detail.url,
-                    file: event.detail.file,
-                    description: ""
-                })
-                albumListRef.update(this.currentAlbum);
+                let albumListRef = firebase.database(this.firebaseApp.app).ref('album/' + this.currentAlbum.albumKey +
+                    '/' + event.detail.photoKey);
+                let item = {};
+                item[event.detail.size] = event.detail.url;
+                albumListRef.update(item);
             }
         }
 

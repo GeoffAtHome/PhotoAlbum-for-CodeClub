@@ -52,9 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --layout-center;
             }
         </style>
-        <firebase-storage-ref app-name="login" path="{{getThumbnailPath(image)}}" download-url="{{image.thumbnail}}"></firebase-storage-ref>
-        <firebase-storage-ref app-name="login" path="{{getLargePath(image)}}" download-url="{{image.large}}"></firebase-storage-ref>
-        <iron-image id="image" class="photo-item" sizing="contain" fade src="[[image.original]]"></iron-image>
+        <iron-image id="image" class="photo-item" sizing="contain" fade src="[[image.big]]"></iron-image>
         <paper-input label="Title:" value="{{image.title}}"></paper-input>
         <paper-input label="Description:" value="{{image.description}}"></paper-input>
     </template>
@@ -69,13 +67,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     firebaseApp: Object,
                     image: Object
                 };
-            }
-            getThumbnailPath(image) {
-                return 'dlM/' + image.file;
-            }
-
-            getLargePath(image) {
-                return 'dlX/' + image.file;
             }
         }
 

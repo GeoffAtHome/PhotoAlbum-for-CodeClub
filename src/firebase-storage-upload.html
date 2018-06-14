@@ -1,6 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/polymerfire/polymerfire.html">
-
+<script src="js/load-image.js"></script>
+<script src="js/load-image-scale.js"></script>
+<script src="js/load-image-meta.js"></script>
+<script src="js/load-image-fetch.js"></script>
+<script src="js/load-image-exif.js"></script>
+<script src="js/load-image-exif-map.js"></script>
+<script src="js/load-image-orientation.js"></script>
 <!--
 `firebase-storage-upload`
 Upload files to firebase storage bucket
@@ -70,13 +76,6 @@ Upload files to firebase storage bucket
 						value: 'file-upload'
 					},
 					/**
-					 * Reference to storage bucket
-					 */
-					storageReference: {
-						type: Object,
-						value: {}
-					},
-					/**
 					 * Upload task from firebases put()
 					 */
 					uploadTask: {
@@ -100,13 +99,28 @@ Upload files to firebase storage bucket
 						value: false
 					},
 					status: String,
-					url: String
+					name: String,
+					url: String,
+					albumKey: String
 				};
+			}
+
+			_resizeTheImage(filename, image, size, storageRef, sizetxt) {
+				loadImage(
+					image,
+					img => {
+						this._uploadFile(filename, img, storageRef, sizetxt);
+					}, {
+						maxWidth: size,
+						canvas: true,
+						orientation: true
+					});
 			}
 
 			_handleFile() {
 				let file = this.$.file.files[0];
 				let maxFileSizeInKiloBytes = this.maxFileSize * 1024;
+				let photoKey = this._addNewPhoto(file.name);
 
 				if (!file) {
 					return;
@@ -120,13 +134,28 @@ Upload files to firebase storage bucket
 					return alert("Upload path not set");
 				}
 
-				this._uploadFile(this.ref, file);
+				this._resizeTheImage(photoKey, file, 1920, firebase.storage(this.firebaseApp.app).ref('/big/'), 'big');
+				this._resizeTheImage(photoKey, file, 300, firebase.storage(this.firebaseApp.app).ref('/thumb/'), 'thumb');
 			}
 
-			_uploadFile(path, file) {
+			_addNewPhoto(filename) {
+				const albumListRef = firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey);
+				const newPostRef = albumListRef.push();
+				newPostRef.set({
+					title: "",
+					original: filename,
+					description: "",
+				});
+				return newPostRef.key;
+			}
+
+			_uploadFile(photoKey, blob, storageRef, size) {
+				let img = blob.toDataURL('image/jpeg').split(',')[1];
 				this.progress = 0;
-				this.uploadTask = this.storageReference.child(file.name).put(file);
-				this.uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+				let uploadTask = storageRef.child(photoKey).putString(img, 'base64', {
+					contentType: 'image/jpg'
+				});
+				uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 					snapshot => {
 						this.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
 						this.status = 'Uploading....'
@@ -153,8 +182,10 @@ Upload files to firebase storage bucket
 							bubbles: true,
 							composed: true,
 							detail: {
-								file: file.name,
-								url: this.uploadTask.snapshot.metadata.downloadURLs[0]
+								albumKey: this.albumKey,
+								photoKey: photoKey,
+								url: uploadTask.snapshot.metadata.downloadURLs[0],
+								size: size
 							}
 						}));
 					}
@@ -163,7 +194,6 @@ Upload files to firebase storage bucket
 
 			connectedCallback() {
 				super.connectedCallback();
-				this.storageReference = firebase.storage(this.firebaseApp.app).ref(this.ref);
 			}
 		}
 
