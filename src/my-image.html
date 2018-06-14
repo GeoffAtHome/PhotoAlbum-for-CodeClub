@@ -52,7 +52,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 @apply --layout-center;
             }
         </style>
-        <iron-image id="image" class="photo-item" sizing="contain" fade src="[[image.big]]"></iron-image>
+        <iron-image id="image" class="photo-item" sizing="contain" preload fade placeholder="[[image.placeholder]]" src="[[image.big]]"></iron-image>
         <paper-input label="Title:" value="{{image.title}}"></paper-input>
         <paper-input label="Description:" value="{{image.description}}"></paper-input>
     </template>

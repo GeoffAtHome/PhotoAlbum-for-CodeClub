@@ -98,8 +98,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready() {
                 super.ready();
-                window.addEventListener('new-url', () => this._newurl());
             }
+
             _createNewAlbum() {
                 if (this.newAlbum !== "") {
                     // Already in the list?
@@ -133,15 +133,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 const albumListRef = firebase.database(this.firebaseApp.app).ref('album');
                 const newPostRef = albumListRef.push(true);
                 return newPostRef.key;
-            }
-
-            // Add the new URL to database for the album
-            _newurl() {
-                let albumListRef = firebase.database(this.firebaseApp.app).ref('album/' + this.currentAlbum.albumKey +
-                    '/' + event.detail.photoKey);
-                let item = {};
-                item[event.detail.size] = event.detail.url;
-                albumListRef.update(item);
             }
         }
 

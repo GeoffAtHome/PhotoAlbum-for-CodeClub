@@ -117,6 +117,18 @@ Upload files to firebase storage bucket
 					});
 			}
 
+			_createPlaceholder(photoKey, image) {
+				loadImage(
+					image,
+					img => {
+						this._updatePhotoRef(photoKey, 'placeholder', img.toDataURL());
+					}, {
+						maxWidth: 10,
+						canvas: true,
+						orientation: true
+					});
+			}
+
 			_handleFile() {
 				let file = this.$.file.files[0];
 				let maxFileSizeInKiloBytes = this.maxFileSize * 1024;
@@ -133,7 +145,7 @@ Upload files to firebase storage bucket
 				if (!this.ref) {
 					return alert("Upload path not set");
 				}
-
+				this._createPlaceholder(photoKey, file);
 				this._resizeTheImage(photoKey, file, 1920, firebase.storage(this.firebaseApp.app).ref('/big/'), 'big');
 				this._resizeTheImage(photoKey, file, 300, firebase.storage(this.firebaseApp.app).ref('/thumb/'), 'thumb');
 			}
@@ -178,18 +190,16 @@ Upload files to firebase storage bucket
 					snapshot => {
 						this.status = 'Upload complete'
 						console.log('success', snapshot);
-						this.dispatchEvent(new CustomEvent('new-url', {
-							bubbles: true,
-							composed: true,
-							detail: {
-								albumKey: this.albumKey,
-								photoKey: photoKey,
-								url: uploadTask.snapshot.metadata.downloadURLs[0],
-								size: size
-							}
-						}));
+						this._updatePhotoRef(photoKey, size, uploadTask.snapshot.metadata.downloadURLs[0]);
 					}
 				);
+			}
+
+			_updatePhotoRef(photoKey, property, value) {
+				let photoRef = firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey + '/' + photoKey);
+				let item = {};
+				item[property] = value;
+				photoRef.update(item);
 			}
 
 			connectedCallback() {
