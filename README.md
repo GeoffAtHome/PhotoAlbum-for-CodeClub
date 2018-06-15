@@ -123,6 +123,6 @@ Polymer applications are easy theme. Themes can be created using this [tool](htt
 
 7. ~~Logout button~~
 
-8. Resizing images on firebase
+8. ~~Resizing images on firebase~~
 
-9. Consuming resized images from firebase
+9. ~~Consuming resized images from firebase~~
