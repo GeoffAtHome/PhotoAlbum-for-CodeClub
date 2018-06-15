@@ -23,8 +23,8 @@ Upload files to firebase storage bucket
 		</style>
 
 		<slot></slot>
-		<input id="file" type="file" on-change="_handleFile" accept="[[accept]]" name="[[name]]" hidden$="[[hideButton]]">
-		<p>[[status]]</p>
+		<input id="file" type="file" on-change="_handleFile" multiple accept="[[accept]]" name="[[name]]" hidden$="[[hideButton]]">
+		<p>[[count]] : [[status]]</p>
 	</template>
 
 	<script>
@@ -98,6 +98,8 @@ Upload files to firebase storage bucket
 						type: Boolean,
 						value: false
 					},
+					loop: Number,
+					count: String,
 					status: String,
 					name: String,
 					url: String,
@@ -130,24 +132,27 @@ Upload files to firebase storage bucket
 			}
 
 			_handleFile() {
-				let file = this.$.file.files[0];
-				let maxFileSizeInKiloBytes = this.maxFileSize * 1024;
-				let photoKey = this._addNewPhoto(file.name);
+				this.length = this.$.file.files.length.toString();
+				this.loop = 0;
+				for (let file of this.$.file.files) {
+					let maxFileSizeInKiloBytes = this.maxFileSize * 1024;
+					let photoKey = this._addNewPhoto(file.name);
 
-				if (!file) {
-					return;
-				}
+					if (!file) {
+						return;
+					}
 
-				if (file.size > maxFileSizeInKiloBytes) {
-					return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
-				}
+					if (file.size > maxFileSizeInKiloBytes) {
+						return alert("File too large, maximum size is " + this.maxFileSize + " kB.");
+					}
 
-				if (!this.ref) {
-					return alert("Upload path not set");
+					if (!this.ref) {
+						return alert("Upload path not set");
+					}
+					this._createPlaceholder(photoKey, file);
+					this._resizeTheImage(photoKey, file, 1920, firebase.storage(this.firebaseApp.app).ref('/big/'), 'big');
+					this._resizeTheImage(photoKey, file, 300, firebase.storage(this.firebaseApp.app).ref('/thumb/'), 'thumb');
 				}
-				this._createPlaceholder(photoKey, file);
-				this._resizeTheImage(photoKey, file, 1920, firebase.storage(this.firebaseApp.app).ref('/big/'), 'big');
-				this._resizeTheImage(photoKey, file, 300, firebase.storage(this.firebaseApp.app).ref('/thumb/'), 'thumb');
 			}
 
 			_addNewPhoto(filename) {
@@ -187,7 +192,11 @@ Upload files to firebase storage bucket
 						console.log('error', error);
 					},
 					snapshot => {
+						let currentFile = this.loop++;
+						currentFile = (currentFile + 1) / 2;
 						this.status = 'Upload complete'
+
+						this.count = currentFile.toString() + " of " + this.length;
 						console.log('success', snapshot);
 						this._updatePhotoRef(photoKey, size, uploadTask.snapshot.metadata.downloadURLs[0]);
 					}
