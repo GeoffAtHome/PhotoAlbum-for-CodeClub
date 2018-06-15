@@ -151,8 +151,7 @@ Upload files to firebase storage bucket
 			}
 
 			_addNewPhoto(filename) {
-				const albumListRef = firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey);
-				const newPostRef = albumListRef.push();
+				const newPostRef = firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey).push();
 				newPostRef.set({
 					title: "",
 					original: filename,
@@ -196,10 +195,9 @@ Upload files to firebase storage bucket
 			}
 
 			_updatePhotoRef(photoKey, property, value) {
-				let photoRef = firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey + '/' + photoKey);
 				let item = {};
 				item[property] = value;
-				photoRef.update(item);
+				firebase.database(this.firebaseApp.app).ref('album/' + this.albumKey + '/' + photoKey).update(item);
 			}
 
 			connectedCallback() {

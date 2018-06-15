@@ -99,9 +99,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     url: String,
                     newAlbumName: String,
                     newAlbumTitle: String,
-                    newAlbumDescription: String,
-                    currentAlbum: Object,
-                    fbref: Object
+                    newAlbumDescription: {
+                        type: String,
+                        value: ""
+                    },
+                    currentAlbum: Object
                 };
             }
 
@@ -114,15 +116,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     // Already in the list?
                     let existing = this.albums.find(x => x.name == this.newAlbumName)
                     if (existing == undefined) {
-                        const albumsListRef = firebase.database(this.firebaseApp.app).ref('albums');
                         existing = {
                             name: this.newAlbumName,
                             title: this.newAlbumTitle,
                             description: this.newAlbumDescription,
-                            albumKey: this.addNewAlbum()
-
+                            albumKey: firebase.database(this.firebaseApp.app).ref('album').push(true).key
                         };
-                        const newAlbumRef = albumsListRef.push(existing);
+                        firebase.database(this.firebaseApp.app).ref('albums').push(existing);
                         this.currentAlbum = existing;
                         existing = this.albums.find(x => x.name == this.newAlbumName);
                     } else {
@@ -140,12 +140,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.currentAlbum = this.albums[index];
                     this.key = this.currentAlbum.key;
                 }
-            }
-
-            addNewAlbum() {
-                const albumListRef = firebase.database(this.firebaseApp.app).ref('album');
-                const newPostRef = albumListRef.push(true);
-                return newPostRef.key;
             }
         }
 
