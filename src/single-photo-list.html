@@ -15,6 +15,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 
 
 <dom-module id="single-photo-list">
@@ -31,8 +32,6 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
             }
 
             .photo-item {
-                margin: 0 0 0 0;
-                padding: 0 0 0 0;
                 width: 300px;
                 height: 300px;
                 max-width: 300px;
@@ -51,20 +50,27 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                 overflow-x: hidden;
             }
 
-            h3 {
+            paper-tooltip {
+                display: inline-block;
                 text-align: center;
                 text-decoration: none;
                 text-transform: none;
+                width: 190px;
+            }
+
+            .heading {
+                text-align: center;
+                font-size: 25px;
             }
         </style>
         <iron-list id="plistView" role="listbox" grid items="[[data]]" as="item">
             <template>
-                <paper-button class="container flex" tabindex$="[[tabIndex]]" role="option" index$="[[index]]" list-index$="[[item.file]]"
-                    url$="[[item.large]]" on-tap="_selectItem">
-                    <div>
-                        <iron-image class="photo-item" sizing="contain" preload fade placeholder="[[item.placeholder]]" src="[[item.thumb]]"></iron-image>
-                        <h3>[[item.description]]</h3>
-                    </div>
+                <paper-button tabindex$="[[tabIndex]]" role="option" index$="[[index]]" list-index$="[[item.file]]" url$="[[item.large]]"
+                    on-tap="_selectItem">
+                    <iron-image class="photo-item" sizing="contain" preload fade placeholder="[[item.placeholder]]" src="[[item.thumb]]"></iron-image>
+                    <paper-tooltip offset="-100">
+                        <div class="heading">[[item.title]]</div>
+                    </paper-tooltip>
                 </paper-button>
             </template>
         </iron-list>

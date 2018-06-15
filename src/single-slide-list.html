@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="../bower_components/paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../bower_components/skeleton-carousel/skeleton-carousel.html">
 <link rel="import" href="my-icons.html">
 
@@ -59,8 +60,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 }
             }
 
-            h3 {
+            .heading {
                 text-align: center;
+                font-size: 50px;
+            }
+
+            .body {
+                font-size: 20px;
             }
         </style>
         <paper-icon-button id="stopSlideShow" class="pl" play$="[[!play]]" icon="my-icons:pause-circle-outline" on-tap="startStopSlideShow"></paper-icon-button>
@@ -71,7 +77,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div>
                     <iron-image placeholder="[[item.thumb]]" sizing="contain" preload="" fade="" data-src$="[[item.big]]">
                     </iron-image>
-                    <h3>[[item.description]]</h3>
+                    <paper-tooltip offset="-200">
+                        <div class="heading">[[item.title]]</div>
+                        <div class="body">
+                            <pre>[[item.description]]</pre>
+                        </div>
+
+                    </paper-tooltip>
                 </div>
             </template>
         </skeleton-carousel>

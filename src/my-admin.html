@@ -69,7 +69,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
         <dom-repeat items="{{data}}">
             <template>
                 <div hidden$="[[showItem(item)]]">
-                    <my-image image="[[item]]" album-path="[[albumPath]]" firebase-app="[[firebaseApp]]"></my-image>
+                    <my-image image="{{item}}" album-path="[[albumPath]]" firebase-app="[[firebaseApp]]"></my-image>
                 </div>
             </template>
         </dom-repeat>
