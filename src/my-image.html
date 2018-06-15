@@ -67,13 +67,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             static get properties() {
                 return {
+                    albumPath: String,
                     firebaseApp: Object,
                     image: Object
                 };
             }
 
             _deletePhoto() {
+                let bigStorageRef = firebase.storage(this.firebaseApp.app).ref('/big/');
+                let thumbStorageRef = firebase.storage(this.firebaseApp.app).ref('/thumb/');
+                let filename = this.image.$key;
+                let path = this.albumPath + '/' + filename;
+                console.log("Deleting: " + filename);
 
+                // Delete the file
+                bigStorageRef.child(filename).delete().then(function () {
+                    // File deleted successfully
+                }).catch(function (error) {
+                    // Uh-oh, an error occurred!
+                    console.log(error);
+                });
+
+                // Delete the file
+                thumbStorageRef.child(filename).delete().then(function () {
+                    // File deleted successfully
+                }).catch(function (error) {
+                    console.log(error);
+                });
+                // Now removed the photo from the selected album
+                firebase.database(this.firebaseApp.app).ref(path).remove();
             }
         }
 
