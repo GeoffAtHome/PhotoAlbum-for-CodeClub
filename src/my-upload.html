@@ -15,7 +15,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -43,22 +45,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
 
         <firebase-query app-name="login" path="albums" data="{{albums}}"></firebase-query>
-        <div class="card">
+        <div id="upload" class="card">
             <h1>Upload</h1>
 
             <paper-dropdown-menu label="Select album">
                 <paper-listbox id="listbox" slot="dropdown-content" selected="1" on-selected-item-changed="_selectedItemChanged">
                     <dom-repeat items="[[albums]]">
                         <template>
-                            <paper-item name$="[[index]]">[[item.title]]</paper-item>
+                            <paper-item name$="[[index]]">[[item.name]]</paper-item>
                         </template>
                     </dom-repeat>
                 </paper-listbox>
             </paper-dropdown-menu>
-            <paper-input label="New album:" value="{{newAlbum}}"></paper-input>
+            <paper-input label="New album name:" value="{{newAlbumName}}"></paper-input>
+            <paper-input label="New album title:" value="{{newAlbumTitle}}"></paper-input>
+            <paper-textarea label="New album description:" value="{{newAlbumDescription}}"></paper-textarea>
             <paper-button raised on-tap="_createNewAlbum">Create New Album</paper-button>
-            <h2>Currently Selected Album: [[currentAlbum.title]]</h2>
-
+            <paper-toast id="albumAlreadyExists" text="This album already exists"></paper-toast>
+            <h2>Currently Selected Album:</h2>
+            <paper-input readonly label="Album name:" value="[[currentAlbum.name]]"></paper-input>
+            <paper-input readonly label="Album title:" value="[[currentAlbum.title]]"></paper-input>
+            <paper-textarea readonly label="Album description:" value="[[currentAlbum.description]]"></paper-textarea>
             <div class="flex">
                 <div class="upload" hidden$="[[userdata.roles.admin]]">
                     <h2>This page is resevered for administrators only</h2>
@@ -90,7 +97,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     userdata: Object,
                     progress: Number,
                     url: String,
-                    newAlbum: String,
+                    newAlbumName: String,
+                    newAlbumTitle: String,
+                    newAlbumDescription: String,
                     currentAlbum: Object,
                     fbref: Object
                 };
@@ -101,20 +110,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             _createNewAlbum() {
-                if (this.newAlbum !== "") {
+                if (this.newAlbumName !== "") {
                     // Already in the list?
-                    let existing = this.albums.find(x => x.title == this.newAlbum)
+                    let existing = this.albums.find(x => x.name == this.newAlbumName)
                     if (existing == undefined) {
                         const albumsListRef = firebase.database(this.firebaseApp.app).ref('albums');
                         existing = {
-                            title: this.newAlbum,
-                            description: "",
+                            name: this.newAlbumName,
+                            title: this.newAlbumTitle,
+                            description: this.newAlbumDescription,
                             albumKey: this.addNewAlbum()
 
                         };
                         const newAlbumRef = albumsListRef.push(existing);
                         this.currentAlbum = existing;
-                        existing = this.albums.find(x => x.title == this.newAlbum);
+                        existing = this.albums.find(x => x.name == this.newAlbumName);
+                    } else {
+                        this.$.albumAlreadyExists.fitInto = this.$.upload;
+                        this.$.albumAlreadyExists.open();
                     }
                     // Select the created album
                     this.$.listbox.selected = this.albums.indexOf(existing);

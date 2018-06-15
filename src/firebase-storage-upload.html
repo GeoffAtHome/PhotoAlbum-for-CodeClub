@@ -165,7 +165,7 @@ Upload files to firebase storage bucket
 				let img = blob.toDataURL('image/jpeg').split(',')[1];
 				this.progress = 0;
 				let uploadTask = storageRef.child(photoKey).putString(img, 'base64', {
-					contentType: 'image/jpg'
+					contentType: 'image/jpeg'
 				});
 				uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
 					snapshot => {

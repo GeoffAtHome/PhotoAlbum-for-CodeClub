@@ -16,6 +16,7 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
@@ -54,13 +55,14 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
             <paper-listbox id="listbox" slot="dropdown-content">
                 <dom-repeat items="[[albums]]">
                     <template>
-                        <paper-item name$="[[index]]">[[item.title]]</paper-item>
+                        <paper-item name$="[[index]]">[[item.name]]</paper-item>
                     </template>
                 </dom-repeat>
             </paper-listbox>
         </paper-dropdown-menu>
+        <paper-input readonly label="Album name:" value="{{selectedAlbum.name}}"></paper-input>
         <paper-input label="Album title:" value="{{selectedAlbum.title}}"></paper-input>
-        <paper-input label="Album description:" value="{{selectedAlbum.description}}"></paper-input>
+        <paper-textarea label="Album description:" value="{{selectedAlbum.description}}"></paper-textarea>
         <dom-repeat items="{{data}}">
             <template>
                 <div hidden$="[[showItem(item)]]">

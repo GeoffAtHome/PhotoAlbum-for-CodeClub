@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -54,7 +55,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         <iron-image id="image" class="photo-item" sizing="contain" preload fade placeholder="[[image.placeholder]]" src="[[image.big]]"></iron-image>
         <paper-input label="Title:" value="{{image.title}}"></paper-input>
-        <paper-input label="Description:" value="{{image.description}}"></paper-input>
+        <paper-textarea label="Description:" value="{{image.description}}"></paper-textarea>
     </template>
 
     <script>
