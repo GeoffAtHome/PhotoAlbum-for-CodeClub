@@ -56,6 +56,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <iron-image id="image" class="photo-item" sizing="contain" preload fade placeholder="[[image.placeholder]]" src="[[image.big]]"></iron-image>
         <paper-input label="Title:" value="{{image.title}}"></paper-input>
         <paper-textarea label="Description:" value="{{image.description}}"></paper-textarea>
+        <paper-button raised on-tap="_deletePhoto">Delete photo</paper-button>
+
     </template>
 
     <script>
@@ -68,6 +70,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     firebaseApp: Object,
                     image: Object
                 };
+            }
+
+            _deletePhoto() {
+
             }
         }
 
