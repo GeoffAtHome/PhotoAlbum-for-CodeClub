@@ -1,6 +1,24 @@
+// usertwo Admin: RPI2VBcB1WWDuV97agWPUkMD3GM2
+// userthree Reader: Sl8EVIW3ImbMJRbuMa3mDvnN9WQ2
+// usertwo Member: c5IK8oVN8uM2OLm0m6AjU207VPB3
 {
-  "rules": {
-    ".read": "auth != null",
-    ".write": "auth != null"
-  }
+    "rules": {
+        "users": {
+            "$user": {
+                ".write": "auth != null && !data.exists()",
+                ".read": "auth != null"
+            }
+        },
+        "albums": {
+            ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
+            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
+
+        },
+        "album": {
+            ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
+            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
+
+        },
+        ".read": false
+    }
 }
