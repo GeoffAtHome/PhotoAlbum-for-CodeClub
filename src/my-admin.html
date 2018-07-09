@@ -36,17 +36,6 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
             :host([hidden]) {
                 display: none !important;
             }
-
-            .photo-item {
-                margin: 0 0 0 0;
-                padding: 0 0 0 0;
-                width: 300px;
-                height: 300px;
-                max-width: 300px;
-                max-height: 300px;
-                min-width: 150px;
-                min-height: 150px;
-            }
         </style>
         <firebase-query app-name="login" path="albums" data="{{albums}}"></firebase-query>
         <firebase-document app-name="login" path="[[selectedAlbumPath]]" data="{{selectedAlbum}}"></firebase-document>
@@ -58,21 +47,21 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                     <template>
                         <paper-item name$="[[index]]">[[item.name]]</paper-item>
                     </template>
-                </dom-repeat>
-            </paper-listbox>
-        </paper-dropdown-menu>
-        <paper-input readonly label="Album name:" value="{{selectedAlbum.name}}"></paper-input>
-        <paper-input label="Album title:" value="{{selectedAlbum.title}}"></paper-input>
-        <paper-textarea label="Album description:" value="{{selectedAlbum.description}}"></paper-textarea>
-        <paper-button raised on-tap="_deleteAlbum">Delete album</paper-button>
+    </dom-repeat>
+    </paper-listbox>
+    </paper-dropdown-menu>
+    <paper-input readonly label="Album name:" value="{{selectedAlbum.name}}"></paper-input>
+    <paper-input label="Album title:" value="{{selectedAlbum.title}}"></paper-input>
+    <paper-textarea label="Album description:" value="{{selectedAlbum.description}}"></paper-textarea>
+    <paper-button raised on-tap="_deleteAlbum">Delete album</paper-button>
 
-        <dom-repeat items="{{data}}">
-            <template>
+    <dom-repeat items="{{data}}">
+        <template>
                 <div hidden$="[[showItem(item)]]">
                     <my-image image="{{item}}" album-path="[[albumPath]]" firebase-app="[[firebaseApp]]"></my-image>
                 </div>
             </template>
-        </dom-repeat>
+    </dom-repeat>
     </template>
 
     <script>
@@ -112,17 +101,17 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                         console.log("Deleting: " + filename);
 
                         // Delete the file
-                        bigStorageRef.child(filename).delete().then(function () {
+                        bigStorageRef.child(filename).delete().then(function() {
                             // File deleted successfully
-                        }).catch(function (error) {
+                        }).catch(function(error) {
                             // Uh-oh, an error occurred!
                             console.log(error);
                         });
 
                         // Delete the file
-                        thumbStorageRef.child(filename).delete().then(function () {
+                        thumbStorageRef.child(filename).delete().then(function() {
                             // File deleted successfully
-                        }).catch(function (error) {
+                        }).catch(function(error) {
                             console.log(error);
                         });
                     }

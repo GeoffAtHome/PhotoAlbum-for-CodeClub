@@ -48,15 +48,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 padding-left: 20px;
             }
 
-            .flex {
-                @apply --layout-horizontal;
-                @apply --layout-center;
+            paper-button {
+                padding: 20px;
+                width: 200px;
+                height: 10px;
+            }
+
+            paper-input {
+                padding: 20px;
+                width: 200px;
+            }
+
+            paper-textarea {
+                padding: 20px;
+                width: 200px;
             }
         </style>
-        <iron-image id="image" class="photo-item" sizing="contain" preload fade placeholder="[[image.placeholder]]" src="[[image.big]]"></iron-image>
-        <paper-input label="Title:" value="{{image.title}}"></paper-input>
-        <paper-textarea label="Description:" value="{{image.description}}"></paper-textarea>
-        <paper-button raised on-tap="_deletePhoto">Delete photo</paper-button>
+        <div class="layout horizontal">
+            <iron-image id="image" class="photo-item" sizing="contain" preload fade placeholder="[[image.placeholder]]" src="[[image.big]]"></iron-image>
+            <div class="layout vertical">
+                <paper-input label="Title:" value="{{image.title}}"></paper-input>
+                <paper-textarea label="Description:" value="{{image.description}}"></paper-textarea>
+                <paper-button raised on-tap="_deletePhoto">Delete photo</paper-button>
+            </div>
+        </div>
 
     </template>
 
@@ -81,17 +96,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 console.log("Deleting: " + filename);
 
                 // Delete the file
-                bigStorageRef.child(filename).delete().then(function () {
+                bigStorageRef.child(filename).delete().then(function() {
                     // File deleted successfully
-                }).catch(function (error) {
+                }).catch(function(error) {
                     // Uh-oh, an error occurred!
                     console.log(error);
                 });
 
                 // Delete the file
-                thumbStorageRef.child(filename).delete().then(function () {
+                thumbStorageRef.child(filename).delete().then(function() {
                     // File deleted successfully
-                }).catch(function (error) {
+                }).catch(function(error) {
                     console.log(error);
                 });
                 // Now removed the photo from the selected album

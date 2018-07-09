@@ -27,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-gallery.html">
 <link rel="lazy-import" href="my-upload.html">
 <link rel="lazy-import" href="my-admin.html">
+<link rel="lazy-import" href="my-users.html">
 <link rel="lazy-import" href="my-contact.html">
 <link rel="lazy-import" href="my-view404.html">
 
@@ -127,9 +128,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template>
     <a name="contact" on-click="_handle_click">Contact</a>
     <template is="dom-if" if="[[userdata.roles.admin]]">
-            <a name="upload" on-click="_handle_click">Upload</a>
-            <a name="admin" on-click="_handle_click">Album admin</a>
+            <a name="upload" on-click="_handle_click">Admin upload</a>
+            <a name="admin" on-click="_handle_click">Admin albums</a>
           </template>
+    <a name="users" on-click="_handle_click">Admin users</a>
     </iron-selector>
     </app-drawer>
 
@@ -158,6 +160,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-upload name="upload" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-upload>
             <my-admin name="admin" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-admin>
           </template>
+            <my-users name="users" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-users>
             <my-view404 name="view404"></my-view404>
         </iron-pages>
     </app-header-layout>

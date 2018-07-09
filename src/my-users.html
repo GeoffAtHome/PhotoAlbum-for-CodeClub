@@ -1,0 +1,93 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+
+http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58679425ac436cee3ab6d190c6d,Holidays,home,home
+
+-->
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-selection-column.html">
+<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid-sorter.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/polymerfire/polymerfire.html">
+
+
+<dom-module id="my-users">
+    <template>
+        <style>
+            :host {
+                display: block;
+                height: 100%;
+                background-color: var(--paper-grey-100);
+            }
+
+            :host([hidden]) {
+                display: none !important;
+            }
+        </style>
+        <firebase-query app-name="login" path="users" data="{{users}}"></firebase-query>
+        <h1>Admin Users</h1>
+        <vaadin-grid theme="row-dividers" items="{{users}}" column-reordering-allowed multi-sort>
+            <vaadin-grid-column width="9em">
+                <template class="header">
+                    <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
+                </template>
+    <template>
+                    [[item.email]]</template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="9em">
+        <template class="header">
+                    <vaadin-grid-sorter path="username">Username</vaadin-grid-sorter>
+                </template>
+        <template>
+                    <paper-input value="{{item.username}}"></paper-input>
+                </template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="5em">
+        <template class="header">
+                    <vaadin-grid-sorter path="roles.admin">Admin</vaadin-grid-sorter>
+                </template>
+        <template>
+                    <paper-checkbox checked="{{item.roles.admin}}"></paper-checkbox>
+                </template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="5em">
+        <template class="header">
+                    <vaadin-grid-sorter path="roles.reader">Reader</vaadin-grid-sorter>
+                </template>
+        <template>
+                    <paper-checkbox checked="{{item.roles.reader}}"></paper-checkbox>
+                </template>
+    </vaadin-grid-column>
+
+    </vaadin-grid>
+    </template>
+
+    <script>
+        class MyUsers extends Polymer.Element {
+
+            static get is() {
+                return 'my-users';
+            };
+
+            static get properties() {
+                return {
+                    firebaseApp: Object,
+                    userdata: Object,
+                    users: Array
+                };
+            }
+        }
+        window.customElements.define(MyUsers.is, MyUsers);
+    </script>
+</dom-module>
