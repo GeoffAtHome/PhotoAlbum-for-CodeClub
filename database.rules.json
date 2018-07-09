@@ -6,19 +6,21 @@
         "users": {
             "$user": {
                 ".write": "auth != null && !data.exists()",
-                ".read": "auth != null"
-            }
+                ".read": true
+            },
+            ".read": "root.child('users').child(auth.uid).child('roles/admin').val() === true",
+            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
         },
         "albums": {
             ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
             ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
-
         },
         "album": {
             ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
             ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
 
         },
-        ".read": false
+        ".read": false,
+        ".write": false
     }
 }
