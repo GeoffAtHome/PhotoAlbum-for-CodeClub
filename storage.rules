@@ -1,16 +1,15 @@
 service firebase.storage {
-    function isAdmin() {
-  	    return request.auth.uid == RPI2VBcB1WWDuV97agWPUkMD3GM2;
-    }
+	function isAdmin() {
+  	return request.auth.uid == RPI2VBcB1WWDuV97agWPUkMD3GM2;
+  }
   
-    function isSizeN(n) {
+  function isSizeN(n) {
       return request.resource.size < n * 1024 * 1024;
-    }
+  }
   
-    function isImage() {
+  function isImage() {
       return request.resource.contentType.matches("image/.*");
-    }
-    
+  }
     match /b/{bucket}/o {
         match /{allImages=**} {
             allow read: if request.auth != null;
