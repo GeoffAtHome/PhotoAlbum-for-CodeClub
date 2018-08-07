@@ -42,9 +42,16 @@
             </div>
         </div>
         <my-app id="mainapp" hidden$="[[!signedIn]]" firebase-app="[[firebaseApp]]" offline="[[offline]]" signed-in="[[signedIn]]"
-            user="[[user]]" userdata="[[userdata]]"></my-app>
+            user="[[user]]" userdata="[[claims]]"></my-app>
     </template>
     <script>
+        async function getClaims(user, result) {
+            const {
+                claims
+            } = await user.getIdTokenResult();
+            return claims;
+        }
+
         class MyLogin extends Polymer.Element {
             static get is() {
                 return 'my-login';
@@ -77,7 +84,8 @@
                     offline: {
                         type: Boolean,
                         value: !1
-                    }
+                    },
+                    claims: Object
                 };
             }
 
@@ -97,19 +105,23 @@
                         username = "Unknown";
                     }
 
-                    this._createUserIfUserDoesNotExist(this.user, {
+                    /* this._createUserIfUserDoesNotExist(this.user, {
                         username: username,
                         email: this.user.email,
                         roles: {
                             member: true
                         }
-                    });
+                    }); */
 
                     Polymer.importHref(
                         'src/my-app.html',
                         null,
                         null,
                         true);
+
+                    getClaims(this.user).then(claims => {
+                        this.claims = claims;
+                    });
                 }
             }
 

@@ -1,21 +1,16 @@
 {
     "rules": {
         "users": {
-            "$user": {
-                ".write": "auth != null && !data.exists()",
-                ".read": true
-            },
-            ".read": "root.child('users').child(auth.uid).child('roles/admin').val() === true",
-            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
+            ".read": "auth.token.admin === true",
+            ".write": "auth.token.admin === true"
         },
         "albums": {
-            ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
-            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
+            ".read": "auth.token.reader === true",
+            ".write": "auth.token.admin === true"
         },
         "album": {
-            ".read": "root.child('users').child(auth.uid).child('roles/reader').val() === true",
-            ".write": "root.child('users').child(auth.uid).child('roles/admin').val() === true"
-
+            ".read": "auth.token.reader === true",
+            ".write": "auth.token.admin === true"
         },
         ".read": false,
         ".write": false
