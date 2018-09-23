@@ -4,6 +4,10 @@
             ".read": "auth.token.admin === true",
             ".write": "auth.token.admin === true"
         },
+        "newusers": {
+            ".read": "auth.token.admin === true",
+            ".write": "auth.token.admin === true"
+        },
         "albums": {
             ".read": "auth.token.reader === true",
             ".write": "auth.token.admin === true"

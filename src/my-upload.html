@@ -18,6 +18,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -29,9 +31,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
         <style include="shared-styles">
             :host {
-                display: flex;
-
-                padding: 10px;
+                display: inline-block;
+                width: 100%;
+                height: 100%;
+                padding: 5px;
+                background-color: var(--paper-grey-100);
             }
 
             .upload {
@@ -54,31 +58,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <template>
                             <paper-item name$="[[index]]">[[item.name]]</paper-item>
                         </template>
-    </dom-repeat>
-    </paper-listbox>
-    </paper-dropdown-menu>
-    <paper-input label="New album name:" value="{{newAlbumName}}"></paper-input>
-    <paper-input label="New album title:" value="{{newAlbumTitle}}"></paper-input>
-    <paper-textarea label="New album description:" value="{{newAlbumDescription}}"></paper-textarea>
-    <paper-button raised on-tap="_createNewAlbum">Create New Album</paper-button>
-    <paper-toast id="albumAlreadyExists" text="This album already exists"></paper-toast>
-    <h2>Currently Selected Album:</h2>
-    <paper-input readonly label="Album name:" value="[[currentAlbum.name]]"></paper-input>
-    <paper-input readonly label="Album title:" value="[[currentAlbum.title]]"></paper-input>
-    <paper-textarea readonly label="Album description:" value="[[currentAlbum.description]]"></paper-textarea>
-    <div class="flex">
-        <div class="upload" hidden$="[[userdata.admin]]">
-            <h2>This page is resevered for administrators only</h2>
-        </div>
-        <div class="upload" hidden$="[[!userdata.admin]]">
-            <p>Select the files to upload.</p>
-            <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" url="[[url]]" name="login" album-key="[[currentAlbum.albumKey]]" label="Upload label" ref="/newupload/" accept="image/jpeg,image/jpeg,image/png" progress="{{progress}}">
+                    </dom-repeat>
+                </paper-listbox>
+            </paper-dropdown-menu>
+            <h2>Currently Selected Album:</h2>
+            <paper-input readonly label="Album name:" value="[[currentAlbum.name]]"></paper-input>
+            <paper-input readonly label="Album title:" value="[[currentAlbum.title]]"></paper-input>
+            <paper-textarea readonly label="Album description:" value="[[currentAlbum.description]]"></paper-textarea>
+            <div class="flex">
+                <div class="upload" hidden$="[[userdata.admin]]">
+                    <h2>This page is resevered for administrators only</h2>
+                </div>
+                <div class="upload" hidden$="[[!userdata.admin]]">
+                    <p>Select the files to upload.</p>
+                    <firebase-storage-upload id="input" firebase-app="[[firebaseApp]]" url="[[url]]" name="login"
+                        album-key="[[currentAlbum.albumKey]]" label="Upload label" ref="/newupload/" accept="image/jpeg,image/jpeg,image/png"
+                        progress="{{progress}}">
 
-                <paper-progress value="[[progress]]"></paper-progress>
-            </firebase-storage-upload>
+                        <paper-progress value="[[progress]]"></paper-progress>
+                    </firebase-storage-upload>
+                </div>
+            </div>
+            <paper-dialog id="createNewAlbumDialog" class="card">
+                <h2>Create new album</h2>
+                <paper-input label="New album name:" value="{{newAlbumName}}"></paper-input>
+                <paper-input label="New album title:" value="{{newAlbumTitle}}"></paper-input>
+                <paper-textarea label="New album description:" value="{{newAlbumDescription}}"></paper-textarea>
+                <div class="buttons">
+                    <paper-button dialog-dismiss>Cancel</paper-button>
+                    <paper-button dialog-confirm autofocus on-tap="_createNewAlbum">Create New Album</paper-button>
+                </div>
+
+                <paper-toast id="albumAlreadyExists" text="This album already exists"></paper-toast>
+            </paper-dialog>
+            <paper-fab icon="my-icons:add" on-tap="_addNewAlbumDialog"></paper-fab>
         </div>
-    </div>
-    </div>
     </template>
 
     <script>
@@ -139,6 +153,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     this.currentAlbum = this.albums[index];
                     this.key = this.currentAlbum.key;
                 }
+            }
+            _addNewAlbumDialog() {
+                this.$.createNewAlbumDialog.open()
             }
         }
 

@@ -31,7 +31,9 @@
     "paper-toast": "PolymerElements/paper-toast#^2.1.1",
     "paper-tooltip": "PolymerElements/paper-tooltip#^2.1.1",
     "vaadin-grid": "^5.0.4",
-    "paper-checkbox": "^2.0.4"
+    "paper-checkbox": "^2.0.4",
+    "paper-dialog": "PolymerElements/paper-dialog#2.x",
+    "paper-fab": "PolymerElements/paper-fab#2.x"
   },
   "resolutions": {
     "polymer": "^2.0.0"

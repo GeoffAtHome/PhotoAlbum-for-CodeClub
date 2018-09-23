@@ -25,6 +25,39 @@ export const onUserUpdate = functions.database.ref("/users/{userId}/roles")
         return admin.auth().setCustomUserClaims(userId, after);
     });
 
+
+// New user added
+export const onNewUserCreate = functions.database.ref("/newusers/{id}")
+    .onCreate((snapshot, context) => {
+        const id = context.params.id;
+        const newUserStr = JSON.stringify(snapshot);
+        console.log("Adding new user: " + newUserStr);
+        const newuser = JSON.parse(newUserStr);
+        const promises = [];
+        promises.push(admin.auth().createUser(newuser)
+            .then(function (userRecord) {
+                // See the UserRecord reference doc for the contents of userRecord.
+                console.log("Successfully created new user:", userRecord.uid);
+            })
+            .catch(function (error) {
+                console.log("Error creating new user:", error);
+            }));
+
+        // Now delete the node
+        const node = admin.database().ref("/newusers/" + id);
+        promises.push(node.remove()
+            .then(function () {
+                // File deleted successfully
+                console.log("Delete Good:" + id);
+            }).catch(function (error) {
+                // Uh-oh, an error occurred!
+                console.log(error);
+            }));
+
+        return Promise.all(promises);
+
+    });
+
 // on sign up.
 exports.processSignUp = functions.auth.user().onCreate(user => {
     console.log("Event: " + JSON.stringify(user));
@@ -48,7 +81,7 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
 
     promises.push(
         admin.database().ref('users/' + user.uid).set({
-            username: "Unknown",
+            username: user.displayName,
             email: user.email,
             roles: customClaims
         }).then(details => {
