@@ -10,11 +10,11 @@
         },
         "albums": {
             ".read": "auth.token.reader === true",
-            ".write": "auth.token.admin === true"
+            ".write": "auth.token.albums === true"
         },
         "album": {
             ".read": "auth.token.reader === true",
-            ".write": "auth.token.admin === true"
+            ".write": "auth.token.albums === true"
         },
         ".read": false,
         ".write": false

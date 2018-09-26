@@ -49,50 +49,59 @@ http://localhost:8080/#/images/Holidays/d8aa0fa148050f65151d93a163680204/e71fd58
                     <template class="header">
                         <vaadin-grid-sorter path="email">Email</vaadin-grid-sorter>
                     </template>
-                    <template>
+    <template>
                         [[item.email]]</template>
-                </vaadin-grid-column>
+    </vaadin-grid-column>
 
-                <vaadin-grid-column width="9em">
-                    <template class="header">
+    <vaadin-grid-column width="9em">
+        <template class="header">
                         <vaadin-grid-sorter path="username">Username</vaadin-grid-sorter>
                     </template>
-                    <template>
+        <template>
                         <paper-input value="{{item.username}}"></paper-input>
                     </template>
-                </vaadin-grid-column>
+    </vaadin-grid-column>
 
-                <vaadin-grid-column width="5em">
-                    <template class="header">
+    <vaadin-grid-column width="5em">
+        <template class="header">
                         <vaadin-grid-sorter path="roles.admin">Admin</vaadin-grid-sorter>
                     </template>
-                    <template>
+        <template>
                         <paper-checkbox checked="{{item.roles.admin}}"></paper-checkbox>
                     </template>
-                </vaadin-grid-column>
+    </vaadin-grid-column>
 
-                <vaadin-grid-column width="5em">
-                    <template class="header">
+    <vaadin-grid-column width="5em">
+        <template class="header">
+                        <vaadin-grid-sorter path="roles.reader">Albums</vaadin-grid-sorter>
+                    </template>
+        <template>
+                        <paper-checkbox checked="{{item.roles.albums}}"></paper-checkbox>
+                    </template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="5em">
+        <template class="header">
                         <vaadin-grid-sorter path="roles.reader">Reader</vaadin-grid-sorter>
                     </template>
-                    <template>
+        <template>
                         <paper-checkbox checked="{{item.roles.reader}}"></paper-checkbox>
                     </template>
-                </vaadin-grid-column>
+    </vaadin-grid-column>
 
-            </vaadin-grid>
+    </vaadin-grid>
+    </div>
+    <paper-dialog id="actions" class="card">
+        <h2>Add User</h2>
+        <paper-input type="email" label="User name:" value="{{userName}}"></paper-input>
+        <paper-input label="Email address:" value="{{emailAddress}}"></paper-input>
+        <div class="buttons">
+            <paper-button dialog-dismiss>Cancel</paper-button>
+            <paper-button dialog-confirm autofocus on-tap="_addUser">Add user</paper-button>
         </div>
-        <paper-dialog id="actions" class="card">
-            <h2>Add User</h2>
-            <paper-input type="email" label="User name:" value="{{userName}}"></paper-input>
-            <paper-input label="Email address:" value="{{emailAddress}}"></paper-input>
-            <div class="buttons">
-                <paper-button dialog-dismiss>Cancel</paper-button>
-                <paper-button dialog-confirm autofocus on-tap="_addUser">Add user</paper-button>
-            </div>
-        </paper-dialog>
-        <paper-fab icon="my-icons:add" on-tap="_addUserDialog"></paper-fab>
-        <paper-toast id="userAlreadyExists" text="This user is already added"></paper-toast>
+    </paper-dialog>
+    <paper-fab icon="my-icons:add" on-tap="_addUserDialog"></paper-fab>
+    <paper-toast id="userAlreadyExists" text="This user is already added"></paper-toast>
 
     </template>
     <script>

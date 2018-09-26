@@ -127,9 +127,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <a name="gallery" on-click="_handle_click">Gallery</a>
           </template>
     <a name="contact" on-click="_handle_click">Contact</a>
-    <template is="dom-if" if="[[userdata.admin]]">
+    <template is="dom-if" if="[[userdata.albums]]">
             <a name="upload" on-click="_handle_click">Admin upload</a>
             <a name="admin" on-click="_handle_click">Admin albums</a>
+          </template>
+    <template is="dom-if" if="[[userdata.admin]]">
             <a name="users" on-click="_handle_click">Admin users</a>
           </template>
     </iron-selector>
@@ -156,9 +158,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-gallery name="gallery"></my-gallery>
           </template>
             <my-contact name="contact"></my-contact>
-            <template is="dom-if" if="[[userdata.admin]]">
+            <template is="dom-if" if="[[userdata.albums]]">
             <my-upload name="upload" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-upload>
             <my-admin name="admin" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-admin>
+          </template>
+            <template is="dom-if" if="[[userdata.admin]]">
             <my-users name="users" firebase-app="[[firebaseApp]]" userdata="[[userdata]]"></my-users>
           </template>
             <my-view404 name="view404"></my-view404>
